@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 
+import initMiddleware from "./initMiddleware.js"
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -25,5 +27,7 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+initMiddleware(router);
 
 export default router
