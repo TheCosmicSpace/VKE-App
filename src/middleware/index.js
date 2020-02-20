@@ -4,8 +4,9 @@
  * @param {*} routeData 
  */
 async function callMiddleware(routeData){
-    let meta = routeData.meta || [];
+    let {meta} = routeData;
     for(let middleware of meta){
+        console.log(middleware);
         let result = await importMiddleware(middleware, routeData);
         console.log(result);
         if(!result) break;
