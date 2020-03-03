@@ -59,6 +59,8 @@ svg{
   cursor:pointer; overflow:visible; width:30px;
   #heart{transform-origin:center; animation:animateHeartOut .3s linear forwards;}
   #main-circ{transform-origin:29.5px 29.5px;}
+  user-select:none;
+  -webkit-tap-highlight-color:rgba(0,0,0,0);
 }
 
 #checkbox{display:none;}
