@@ -7,6 +7,7 @@
       <form @submit.prevent="handleSubmit" class="form">
         <div class="form-wrap">
           <div class="input-group">
+
             <!-- Username input -->
             <vs-input class="form-input" v-model="user.name" placeholder="User name">
               <template #icon>
@@ -36,7 +37,9 @@
                 <i class='bx bx-lock-open-alt' ></i>
               </template>
             </vs-input>
+            
           </div>
+
           <!-- Button -->
           <vs-button
             flat
@@ -60,6 +63,7 @@
 
 <script>
   export default {
+    name: 'Auth',
     methods:{
       toggleForm(){
         this.isLoggingIn = !this.isLoggingIn;
@@ -195,6 +199,8 @@
   }
   .form-input .vs-input__icon{
     margin-left: 10px;
+    user-select: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
   }
   .form-input:nth-child(2) .vs-input{
     /* z-index: 1; */
@@ -205,7 +211,7 @@
     position: absolute;
     top: 50%;
     right: -25px;
-    transform: translateY(-60%);
+    transform: translateY(-55%);
     border-radius: 50%; 
     color:#fff; 
     font-size: 25px;
