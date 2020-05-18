@@ -9,21 +9,37 @@
           <div class="input-group">
 
             <!-- Username input -->
-            <vs-input class="form-input" v-model="user.name" placeholder="User name">
+            <vs-input
+              v-if="!isLoggingIn"  
+              v-model="user.username" 
+              :disabled="processing" 
+              placeholder="User name"
+              class="form-input">
               <template #icon>
                 <i class='bx bx-user'></i>
+              </template>
+            </vs-input>
+            
+            <!-- Email input -->
+            <vs-input 
+              v-model="user.email" 
+              :disabled="processing"
+              class="form-input" 
+              placeholder="Email">
+              <template #icon>
+                <i class='bx bx-mail-send'></i>
               </template>
             </vs-input>
 
             <!-- Password input -->
             <vs-input
-              :style="getBackgroud"
-              class="form-input"
-              type="password"
               v-model="user.password"
-              placeholder="Password"
+              :disabled="processing"
               :progress="getProgress"
               :visiblePassword="hasVisiblePassword"
+              class="form-input"
+              type="password"
+              placeholder="Password"
               @click-icon="hasVisiblePassword = !hasVisiblePassword">
               <template #icon>
                 <i v-if="!hasVisiblePassword" class='bx bx-show-alt'></i>
@@ -32,12 +48,19 @@
             </vs-input>
             
             <!-- Password repeat-->
-            <vs-input v-if="!isLoggingIn" class="form-input" type="password" :success="getPasswordMatch" v-model="user.confirmPassword" placeholder="Confirm password">
+            <vs-input 
+              v-if="!isLoggingIn" 
+              v-model="user.confirmPassword"
+              :disabled="processing"
+              :success="getPasswordMatch" 
+              class="form-input"
+              type="password" 
+              placeholder="Confirm password">
               <template #icon>
                 <i class='bx bx-lock-open-alt' ></i>
               </template>
             </vs-input>
-            
+
           </div>
 
           <!-- Button -->
@@ -50,8 +73,9 @@
           </vs-button>
         </div>
       </form>  
-      <p v-if="isLoggingIn" class="forgot">Forgot?</p>  
+      <!-- <p v-if="isLoggingIn" class="forgot">Forgot?</p>   -->
       <vs-button
+        :disabled="processing"
         transparent
         @click="toggleForm"
         class="toggleForm">
@@ -62,38 +86,92 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
   export default {
     name: 'Auth',
     methods:{
+      ...mapActions([
+        'registerUser',
+        'loginUser',
+        'saveUserToCollection',
+        'updateProfile'
+      ]),
+      // Notification
+      openNotification({title, text}, color = 'danger', position = 'top-center') {
+        const noti = this.$vs.notification({
+          color,
+          position,
+          title: title,
+          text: text
+        })
+      },
+      // Toggle Form 
       toggleForm(){
-        this.isLoggingIn = !this.isLoggingIn;
+        this.isLoggingIn = !this.isLoggingIn
       },
+      // Toggle Processing
+      toggleProcessing(state){
+        this.processing = state
+      },
+      // Submit Form
       handleSubmit(){
-        console.log(this.user);
-        this.processing = true;
-        setTimeout(()=>{
-          this.processing = false;
-          if (this.isLoggingIn) {
-              this.login();
-          } else {
-              this.register();
-          }
-        },5000);
+        // Processing to true
+        this.toggleProcessing(true)
+        // Select start login or register logic
+        this.isLoggingIn ? this.login() : this.register()
       },
-      login() {
-
+      // Login logic
+      async login() {
+        try{
+          // Call action loginUser in store
+          await this.loginUser(this.user)
+          this.$router.replace({name: "Posts"})
+        }
+        catch(err){
+          console.log(err)  
+          // Notification on Error
+          this.openNotification({
+            title: parseErrorTitle(err.code),
+            text: err.message
+          })
+        }
+        finally{
+          setTimeout(()=>this.toggleProcessing(false), 500)
+        }
       },
-      register() {
-        if (this.user.password !== this.user.confirmPassword) {
-          alert("Your passwords do not match.");
-          this.processing = false;
-          return;
+      // Registration logic
+      async register() {
+        const { password, confirmPassword } = this.user 
+        if(password !== confirmPassword) {
+          this.toggleProcessing(false)
+          // Notification on Error
+          this.openNotification({
+            title: "Invalid Password"
+          })
+          return
+        }
+        try{
+          // Call action registerUser in store
+          await this.registerUser(this.user)
+          this.$router.replace({name: "Posts"})
+        }
+        catch(err){
+          console.log(err)
+          // Notification on Error
+          this.openNotification({
+            title: parseErrorTitle(err.code),
+            text: err.message
+          })
+        }
+        finally{
+          setTimeout(()=>this.toggleProcessing(false), 500)
         }
       }
     },
     data:() => ({
       user:{
-        name: '',
+        username: '',
+        email: '',
         password: '',
         confirmPassword: ''
       },
@@ -101,53 +179,48 @@
       isLoggingIn: true,
       processing: false
     }),
-      computed: {
-        getPasswordMatch(){
-          return (this.user.password === this.user.confirmPassword && this.user.password !== '');
-        },
-        getBackgroud(){
-          // return "background: linear-gradient(90deg,red,white);";
-        },
-        getProgress() {
-          let progress = 0
+    computed: {
+      ...mapGetters([
+        'getUser',
+        'checkUser'
+      ]),
+      // Check to Password Match 
+      getPasswordMatch(){
+        return (this.user.password === this.user.confirmPassword && this.user.password !== '')
+      },
 
-          // at least one number
-
-          if (/\d/.test(this.user.password)) {
-            progress += 20
-          }
-
-          // at least one capital letter
-
-          if (/(.*[A-Z].*)/.test(this.user.password)) {
-            progress += 20
-          }
-
-          // at menons a lowercase
-
-          if (/(.*[a-z].*)/.test(this.user.password)) {
-            progress += 20
-          }
-
-          // more than 5 digits
-
-          if (this.user.password.length >= 6) {
-            progress += 20
-          }
-
-          // at least one special character
-
-          if (/[^A-Za-z0-9]/.test(this.user.password)) {
-            progress += 20
-          }
-
-          return this.isLoggingIn ? null : progress
-        }
+      // Get Progress Password
+      getProgress() {
+        let progress = 0
+        // at least one number
+        if (/\d/.test(this.user.password)) progress += 20
+        // at least one capital letter
+        if (/(.*[A-Z].*)/.test(this.user.password)) progress += 20
+        // at menons a lowercase
+        if (/(.*[a-z].*)/.test(this.user.password)) progress += 20
+        // more than 5 digits
+        if (this.user.password.length >= 6) progress += 20
+        // at least one special character
+        if (/[^A-Za-z0-9]/.test(this.user.password)) progress += 20
+        return this.isLoggingIn ? null : progress
       }
     }
+  }
+  // Encapsulation logic
+  // Learn RegExp, it's shit
+function parseErrorTitle(error){
+  return error.split("/").splice(-1).toString().split("-").map(item => item.charAt(0).toUpperCase() + item.slice(1)).join(" ")
+}
 </script>
 
 <style>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s
+}
+
+.fade-enter, .fade-leave-active {
+  opacity: 0
+}
   .auth-wrap{
     height: 100vh;
     /* background: #FEFEFE; */
@@ -205,6 +278,10 @@
   .form-input:nth-child(2) .vs-input{
     /* z-index: 1; */
   }
+  /* input:-internal-autofill-selected{
+    background: fff !important;
+    color: inherit !important;
+  } */
   .form-btn{
     width: 50px;
     height: 50px;
@@ -239,4 +316,12 @@
   .toggleForm:hover::before{
     opacity: 0;
   }
+@media (max-width: 600px){
+  .vs-notification{
+    border-bottom-left-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+  }
+}
+
+  /* .vs-notification vs-notification--color vs-notification--sticky vs-notification--danger notification-enter-to */
 </style>
