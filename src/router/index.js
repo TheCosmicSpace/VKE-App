@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Posts from '../views/Posts.vue'
 
 import initMiddleware from "./initMiddleware.js"
 
@@ -9,16 +9,35 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    name: 'Posts',
+    component: Posts,
+    meta: {
+      middleware: ['checkMobileDevice']
+    },
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: '/posts/:postId',
+    name: 'PostItem',
+    props: true,
+    component: () => import('../views/PostItem.vue')
+  },
+  {
+    path: '/add-post',
+    name: 'AddPost',
+    component: () => import('../views/AddPost.vue')
+  },
+  {
+    path: '/auth',
+    name: 'Auth',
+    component: () => import('../views/Auth.vue')
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    meta: {
+      middleware: ['isAuth']
+    },
+    component: () => import('../views/Profile.vue')
   }
 ]
 
