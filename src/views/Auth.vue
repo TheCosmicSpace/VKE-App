@@ -125,7 +125,8 @@ import { mapGetters, mapActions } from 'vuex'
         try{
           // Call action loginUser in store
           await this.loginUser(this.user)
-          this.$router.replace({name: "Posts"})
+          this.$router.push({name: "Posts"})
+          this.$router.go()
         }
         catch(err){
           console.log(err)  
@@ -153,7 +154,7 @@ import { mapGetters, mapActions } from 'vuex'
         try{
           // Call action registerUser in store
           await this.registerUser(this.user)
-          this.$router.replace({name: "Posts"})
+          this.$router.push({name: "Posts"})
         }
         catch(err){
           console.log(err)
