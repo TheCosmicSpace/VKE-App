@@ -1,0 +1,106 @@
+%centering{
+  display: flex;
+  align-items: center;
+}
+%bgcentering{
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+// 
+@mixin blackening($alpha){
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,$alpha);
+}
+// ========================
+.card{
+  color: $text-color;
+  position: relative;
+  min-width: 320px;
+  flex: 0 1 500px;
+  padding: 10px 8px;
+  margin-bottom: 30px;
+  &::before{
+    content: '';
+    position: absolute;
+    right: 0px;
+    bottom: 0;
+    // background: rgb(30,30,30);
+    background: $postCard-bg; 
+    width: 90%;
+    height: 85%;
+    border-radius: 10px;
+    transition: .3s;
+  }
+  &__title{
+    @include setFontSize(18px);
+    position: absolute;
+    // word-break: break-all;
+    left: 0;
+    bottom: 0;
+    padding: 15px;
+    font-weight: 600;
+    z-index: 2;
+  }
+  &__frame{
+    position: relative;
+    padding-top: 56.25%;
+    // background-attachment: fixed;
+    @extend %bgcentering;
+    object-fit: cover;
+    border-radius: 10px;
+    &::before{
+      @include blackening(.5);
+      background: linear-gradient(0deg, rgba(0,0,0,.6) 25%, rgba(255,255,255,.05));
+      border-radius: inherit;
+    }
+    &::after{
+      z-index: 2; 
+      @include blackening(0);
+      border-radius: inherit;
+    }
+  }
+  &__fitback{
+    position: relative;
+    @extend %centering;
+  }
+  &__footer{
+    padding-top: 8px;
+    @extend %centering;
+    justify-content: space-between;
+  }
+}
+.card-info{
+  position: relative;
+  @extend %centering;
+  &__avatar{
+    width: 40px;
+    height: 40px;
+    margin-right: 8px;
+    object-fit: cover;
+    .vs-avatar img{
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  &__author-name{
+    @include setFontSize(14px);
+    font-style: italic;
+    font-weight: 600;
+    max-width: 150px;
+    white-space: nowrap;
+    overflow-x: hidden; 
+    text-overflow: ellipsis; 
+  }
+  &__date{
+    @include setFontSize(12px);
+  }
+}
+.vs-avatar-content.card-info__avatar{
+  border-radius: 5px;
+}
