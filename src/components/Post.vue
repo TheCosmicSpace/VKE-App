@@ -1,7 +1,7 @@
 <template>
 <article class="card">
-  <div class="card__frame" :style="{backgroundImage: getPostBackground}" :data-identify="postData.id" ref="postItem">
-    <h2 class="card__title" ref="card-title">{{postData.postTitle}}</h2>
+  <div class="card__frame" :style="{backgroundImage: getPostBackground}" :data-identify="postData.id">
+    <h2 class="card__title">{{postData.postTitle}}</h2>
   </div>
   <div class="card__footer">
     <div class="card-info">
@@ -43,21 +43,11 @@ export default {
     getPostBackground(){
       const { postPhotoURL } = this.postData
       if(postPhotoURL) return `url(${postPhotoURL})`
-      // return 'url(../assets/postImgDefault.jpg)'
     }
   },  
   data:()=>({
-
   }),
   methods: {
-    comeToPost(){
-      const { top } = this.$refs.postItem.getBoundingClientRect();
-      console.log(top);
-      console.log(this.$refs.clipCircle.style);
-      
-      this.$refs.clipCircle.style.clipPath = "circle(100vh)";
-      // this.$router.push({name: 'PostItem', params: {id: this.idpost, PosTop: top}});
-    }
   }
 }
 </script>
