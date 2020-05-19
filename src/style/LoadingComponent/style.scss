@@ -1,0 +1,11 @@
+.content-div{
+  .vs-loading{
+    background: transparent;
+    z-index: 999;
+    padding: 0;
+    &__load__animation{
+      width: 80px;
+      height: 80px;
+    }
+  }
+}

@@ -1,0 +1,16 @@
+.center{
+  flex-direction: column;
+  .content-div{
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+    border-radius: 20px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    font-size: .6rem;
+  }
+} 

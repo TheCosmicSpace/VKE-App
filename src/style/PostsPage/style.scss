@@ -1,0 +1,36 @@
+.circle{
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  z-index: 99; 
+  left: 0%;
+  top: 0%;
+  transition: 1s;
+  background: $theme-bg;
+}
+.home{
+  color: #fff;
+  padding-bottom: 100px;
+}
+.home-title{
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.vs-button.add-btn{
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-55%);
+}
+.vs-button.add-btn:focus{
+  transform: translateY(-55%);
+}
+.posts{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
