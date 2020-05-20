@@ -1,0 +1,103 @@
+$input-bg:#28293d;
+$icon-color: #1f1f2e;
+.search-room{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 95%;
+  margin: 0 auto;
+  .vs-input{
+    width: 100%;
+    background: $input-bg;
+    color: $text-color;
+    padding: 13px 5px 13px 45px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    &__label,
+    &__icon{
+      color: $text-color;
+      opacity: 1;
+    }
+    &__icon{
+      background: $icon-color;
+      left: 4px;
+    }
+    &:focus.vs-input--has-icon:not(.vs-input--has-icon--after){
+      padding-left: 50px;
+    }
+    &:focus ~ .vs-input__icon{
+      transform: none;
+      color: $text-color;
+      background: $icon-color;
+    }
+  }
+
+  .vs-select{
+    user-select: none;
+    &-content{
+      max-width: 120px; 
+    }
+    &__input{
+      border-bottom-left-radius: 0;
+      border-top-left-radius: 0;
+      background: $input-bg;
+      color: $text-color;
+      font-family: Montserrat, Avenir, Helvetica, Arial, sans-serif;
+      font-size: 0.8rem;
+      padding: 13px 5px 13px 10px;
+      &:focus, 
+      &:hover{
+        transform: none;
+        border-radius: 0 12px 12px 0;
+      } 
+    }
+    &__label{
+      color: $text-color;
+      opacity: 1;
+    }
+  }
+  .vs-icon-arrow{
+    right: 10px;
+    &::after,
+    &::before{
+      background: $icon-color;
+      user-select: none;
+    }
+  }
+  .vs-select.activeOptions .vs-select__input{
+    background: $input-bg;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    transform: none;
+  }
+}
+// ====
+.vs-select{
+  overflow-x: hidden;
+  &__options{
+    background: $input-bg;
+    box-shadow: 0px -5px 14px -9px rgba(0,0,0,0.75);
+    margin-top: -5px;  
+  }
+  &__option{
+    padding: 6px;
+    font-family: Montserrat, Avenir, Helvetica, Arial, sans-serif;
+    font-size: 0.8rem;
+    color: $text-color;
+    user-select: none;
+    &.activeOption{
+      color: $text-color;
+      background: $input-bg;
+    }
+    &:hover:not(:disabled){
+      color: $text-color;  
+      user-select: none;
+    }
+  }
+  &.activeOptions{
+    .vs-select__input{
+      color: $text-color;
+      border-radius: 0 12px 12px 0;
+    }
+  }
+}
