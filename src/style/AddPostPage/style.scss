@@ -1,0 +1,26 @@
+.addPost-title{
+  &__input {
+    position: relative;
+    & .vs-input__label{
+      color: #fff;
+      font-size: 18px;
+      opacity: 1; 
+    } 
+    & .vs-input{
+      width: 100%;
+      font-size: 16px;
+      // margin-top: 5px;
+      padding: 7px;
+      padding-right: 30px;
+    }    
+  }
+}
+.input:-internal-autofill-selected{
+  background-color:s transparent !important;
+}
+
+.addPost-photo{
+  &__btn .vs-button__content{
+    padding: 7px;
+  }
+}
