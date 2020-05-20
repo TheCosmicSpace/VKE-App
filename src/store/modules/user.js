@@ -49,7 +49,7 @@ export default {
       console.log("editData", editData)
       const user = await firebase.auth().currentUser
       await user.updateProfile({...editData})
-      dispatch("stateChanged", user)
+      await dispatch("stateChanged", user)
     },
     async upgradeToAdmin({getters, dispatch}, key){
       if(secretKey !== key) return false
@@ -60,11 +60,12 @@ export default {
       })
       const user = await dispatch("getUserFromCollection", userId)
       console.log(user);
-      dispatch("stateChanged", user)
+      await dispatch("stateChanged", user)
     },
     // Save User To Collection
     async saveUserToCollection({commit, getters}){
       const user = getters.getUser
+      console.log("user", user);
       await firebase.firestore().collection('users').doc(user.id).set({...user})
     },
     // Save Changes User To Collection
@@ -73,14 +74,17 @@ export default {
       await firebase.firestore().collection('users').doc(userId).update({...updateData})
     },
     async getUserFromCollection({getters}, userId){
-      return await (await firebase.firestore().collection('users').doc(userId).get()).data()
+      const user = await firebase.firestore().collection('users').doc(userId).get()
+      console.log(user.exists);
+      return user.exists ? await user.data() : {}
+      // return await (await firebase.firestore().collection('users').doc(userId).get()).data()
     },
     //=== StateChanged ===
     async stateChanged({commit, dispatch}, user){
       if (user) {
-        const userFromCollection = await dispatch("getUserFromCollection", user.uid)
+        const userFromCollection = await dispatch("getUserFromCollection", (user.uid || user.id))
         console.log({...user, ...userFromCollection});
-        commit("setUser", new User({...user, ...userFromCollection}))
+        commit("setUser", new User({...userFromCollection, ...user}))
       }
       else commit("setUser", null)
     }

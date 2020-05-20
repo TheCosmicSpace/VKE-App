@@ -4,7 +4,7 @@ export default class {
     this.email = email;
     this.photoURL = photoURL;
     this.id = uid;
-    this.admin = admin;
+    this.admin = admin || false;
     // this.metadata = metadata;
   }
 }
