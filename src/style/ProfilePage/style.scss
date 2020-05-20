@@ -1,0 +1,48 @@
+.vs-avatar-content .vs-avatar img{
+  object-fit: cover;
+  height: 100%;
+}
+.profile{
+  &__upgrade{
+    .vs-switch{
+      max-width: 90px;
+      margin: 10px auto;  
+    }
+    .vs-input__label{
+      opacity: 1;
+      color: #000;
+    }
+    .vs-input:focus ~ .vs-input__icon--after{
+      transform: none;
+    }
+    .vs-input:focus ~ .vs-input__icon{
+      transform: none;
+      background: rgb(25, 91, 255);
+    }
+  }
+  &__edit-username .vs-input-content .vs-input{
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    font-size: 1em;
+    font-family: Montserrat, Avenir, Helvetica, Arial, sans-serif;
+    padding-top: 0; 
+  }
+}
+.key-input{
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  text-align: center;
+  .vs-input-content{
+    margin: 0 auto;
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+  }
+  .vs-button{
+    margin-left: -15px;
+  }
+  .vs-button--default:hover{
+    transform: none;
+  } 
+}
