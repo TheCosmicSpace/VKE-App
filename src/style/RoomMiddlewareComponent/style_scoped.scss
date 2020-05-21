@@ -1,0 +1,25 @@
+.key-input{
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  text-align: center;
+  opacity: 1;
+  transition: opacity .3s 1s;
+  .vs-button--default{
+    background: #28293D;
+  }
+  .vs-input-content{
+    margin: 0 auto;
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+  }
+  .vs-button{
+    margin-left: -35px;
+    &__content{
+      padding: 5px;
+    }
+  }
+  .vs-button--default:hover{
+    transform: none;
+  } 
+}

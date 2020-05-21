@@ -1,0 +1,22 @@
+.key-input{
+  .vs-input{
+    // width: 250px;
+    border-radius: 8px;
+    color: #1F1F2E;
+    padding: 10px;
+    padding-right: 40px;
+    &__label{
+      color: #1F1F2E;
+      opacity: 1;
+    }
+  }
+  .vs-button{
+    border-radius: 5px;
+    &--icon i{
+      @include setFontSize(15px);
+    }
+    &__loading{
+      background: fade-out(#1F1F2E, .4);
+    }
+  }
+}
