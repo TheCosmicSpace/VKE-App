@@ -1,6 +1,6 @@
 <template>
   <div class="search-room">
-    <vs-input v-model="searchRoom" @input="onSearchEmit" autocomplete="off" placeholder="Enter room's name...">
+    <vs-input v-model="searchRoom" @input="onSearchEmit" autocomplete="off" placeholder="Enter room name">
       <template #icon>
         <i class='bx bx-search'></i>
       </template>
@@ -26,12 +26,12 @@
     }),
     methods: {
       onSearchEmit(searchRoom){
-        console.log(searchRoom);
+        this.$emit('searchRoom', searchRoom)
       }
     },
     watch: {
       typeRooms(){
-        console.log(this.typeRooms);
+        this.$emit('toggleTypeRooms', this.typeRooms)
       }
     }
   }
