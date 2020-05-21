@@ -4,7 +4,8 @@ $icon-color: #1f1f2e;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 95%;
+  // width: 95%;
+  width: 100%;
   margin: 0 auto;
   .vs-input{
     width: 100%;
@@ -13,6 +14,9 @@ $icon-color: #1f1f2e;
     padding: 13px 5px 13px 45px;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
+    &-parent{
+      // flex: 1;
+    }
     &__label,
     &__icon{
       color: $text-color;
@@ -33,17 +37,17 @@ $icon-color: #1f1f2e;
   }
 
   .vs-select{
-    user-select: none;
     &-content{
       max-width: 120px; 
     }
     &__input{
+      user-select: none;
       border-bottom-left-radius: 0;
       border-top-left-radius: 0;
       background: $input-bg;
       color: $text-color;
       font-family: Montserrat, Avenir, Helvetica, Arial, sans-serif;
-      font-size: 0.8rem;
+      @include setFontSize(0.8rem);
       padding: 13px 5px 13px 10px;
       &:focus, 
       &:hover{
@@ -82,7 +86,7 @@ $icon-color: #1f1f2e;
   &__option{
     padding: 6px;
     font-family: Montserrat, Avenir, Helvetica, Arial, sans-serif;
-    font-size: 0.8rem;
+    @include setFontSize(0.8rem);
     color: $text-color;
     user-select: none;
     &.activeOption{
