@@ -1,0 +1,116 @@
+.chat-room{
+  position: relative;
+  margin: 15px 10px;
+  background: #28293d;
+  padding: 10px;
+  border-radius: 8px;
+  display: flex;
+  // align-items: center;
+  color: $text-color;
+  &__borderLine{
+    width: 3px;
+    height: 66%;
+    position: absolute;
+    left: 0px;
+    top: 50%;
+    background: $main-color;
+    box-shadow: 0 0 0.2rem $main-color, 
+                inset 0 0 0.2rem $main-color,
+                0 0 0.5rem $main-color,
+                inset 0 0 0.5rem $main-color,
+                0 0 4rem $main-color,
+                inset 0 0 4rem $main-color;
+    border-radius: 0 8px 8px 0;
+    transform: translateY(-50%);
+    transition: .3s;
+    z-index: 99;
+  }
+  &__photo{
+    margin-right: 5px;
+    img {
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}
+.info{
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 100px);
+  @include setFontSize(10px);
+  &__top,
+  &__footer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;   
+  }
+  &__footer{
+    margin-top: auto;
+  }
+  &__title{
+    @extend %text-overflow; 
+    margin-right: 10px;
+    @include setFontSize(14px);
+  }
+  &__icon{
+    margin-right: 5px;
+  }
+  &__counterMsg{
+    text-align: center;
+    background: $main-color;
+    border-radius: 4px;
+    padding: 3px;
+  }
+  &__lastMsg{
+    @extend %text-overflow;
+    margin-right: 10px;
+    @include setFontSize(10px);
+  }
+  &__lastUserName{
+    @include setFontSize(12px);
+  }
+}
+
+.showSecret{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: showSecret .8s forwards .2s;
+}
+.showSecret ~ div{
+  animation: blurRoom .3s forwards .8s;
+}
+.room-middleware{
+  opacity: 0;
+  transform: translateX(-20px);
+  animation: middleware .3s forwards 1.2s;
+}
+@keyframes middleware {
+  100%{
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}
+@keyframes blurRoom {
+  100%{filter: blur(1.5px);}
+}
+@keyframes showSecret {
+  0%{
+    width: 3px;
+    height: 66%;
+  }
+  70%{
+    width: 100%;
+    height: 66%;
+    box-shadow: 0 0 0.5rem $main-color;
+  }
+  100%{
+    background: fade-out($main-color, .25);
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    box-shadow: 0 0 0.5rem $main-color;
+  }
+}
