@@ -1,6 +1,9 @@
-.toggle-location{
-  .vs-button__content{
-    font-weight: bold;
-    font-size: 16px;
-  }
+.vs-button.create-btn{
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-55%);
+}
+.vs-button.create-btn:focus{
+  transform: translateY(-55%);
 }

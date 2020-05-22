@@ -1,5 +1,12 @@
-.toggle-location{
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.chats{
+  // padding: 0 10px;
+  &-title{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  &-rooms{
+    margin: 20px 0;
+  }
 }
