@@ -31,20 +31,41 @@ export default {
       return storageRef.ref.getDownloadURL()
     },
     // Create Chat Room  
-    async createChatRoom({commit, getters}, payload){
-      const { id } = getters.getUser
+    async createChatRoom({commit, dispatch, getters}, payload){
+      const { id, displayName } = getters.getUser
       const data = {
         ...payload,
         adminId: id,
         createAt: Date.now(),
         count: 0,
         messages: [],
-        users: []
+        users: [id]
       }
       console.log(data);
+      // Create Chat Room 
       const docRef = await firebase.firestore().collection('chats').add(data)
+      // Add first message
+      await dispatch('sendMessage', {
+        chatId: docRef.id,
+        content: `${displayName} created chat room!`
+      }) 
       console.log(docRef);
       return docRef.id
+    },
+    // Send messages to chat (chatId)
+    async sendMessage({commit, getters}, {chatId, content, photoURL = null}){
+      const { id } = getters.getUser
+      const data = {
+        userId: id,
+        content,
+        photoURL,
+        createAt: Date.now()
+      }
+      const docRef = await firebase.firestore().collection('chats').doc(chatId)
+      return await docRef.update({
+        messages: firebase.firestore.FieldValue.arrayUnion(data),
+        count: firebase.firestore.FieldValue.increment(1)
+      })
     },
 
   //===== Get actions ===== //
