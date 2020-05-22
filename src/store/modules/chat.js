@@ -15,11 +15,12 @@ export default {
     prevTypeRooms: 'scoped'
   },
   mutations: {
-    setChatRoomsCollection: (state, collection) => {
-      state.chatRoomsCollection = collection
-    },
+    // Set chat rooms collection
+    setChatRoomsCollection: (state, collection) => state.chatRoomsCollection = collection,
     // Set Rersonse Status
-    setEmptyResStatus: (state, status) => state.emptyResStatus = status
+    setEmptyResStatus: (state, status) => state.emptyResStatus = status,
+    // Change prev type rooms
+    changePrevTypeRooms: (state, type) => state.prevTypeRooms = type
   },
   actions: {
   // ===== Set actions ===== //
@@ -48,33 +49,33 @@ export default {
 
   //===== Get actions ===== //
     // Get Chat Rooms
-    async getChatRooms({commit, dispatch}, typeRooms){
-      if(typeRooms === 'scoped')
-        await dispatch('getScopedRooms')
-      else if(typeRooms === 'global')
-        await dispatch('getGlobalRooms')
-    },
-    // Get Scoped Rooms
-    async getScopedRooms({commit, dispatch, getters}){
-      const { id } = getters.getUser
-      console.log('getScopedRooms');
+    async getChatRooms({commit, dispatch, getters}, typeRooms){
+      // Load
+      if(getters.prevTypeRooms !== typeRooms) commit('setEmptyResStatus', false)
+      // Change prev type rooms 
+      commit('changePrevTypeRooms', typeRooms)
+      // Ref on chats collection
       const chatsRef = await firebase.firestore().collection('chats')
-      const scopedRooms = await chatsRef.where('users', 'array-contains', id).get()
-      // Set empty response status
-      if(scopedRooms.empty) return commit('setEmptyResStatus', scopedRooms.empty)
-      const scopedRoomsCollection = await dispatch("constructCollection", scopedRooms)
-      commit('setChatRoomsCollection', scopedRoomsCollection)
-      console.log(scopedRooms, scopedRooms.empty);
-    },
-    // Get Global Rooms
-    async getGlobalRooms({commit, dispatch}){
-      console.log('getGlobalRooms');
-      const globalRooms = await firebase.firestore().collection('chats').get()
-      // Set empty response status
-      if(globalRooms.empty) return commit('setEmptyResStatus', globalRooms.empty)
-      const globalRoomsCollection = await dispatch('constructCollection', globalRooms)
-      commit('setChatRoomsCollection', globalRoomsCollection)
-      console.log(globalRoomsCollection);
+      const { id } = getters.getUser
+      // Check on type rooms
+      let chatRooms = []
+      if(typeRooms === 'scoped'){
+        // Get scoped rooms 
+        chatRooms = await chatsRef.where('users', 'array-contains', id).get()
+      }  
+      else if(typeRooms === 'global'){
+        // Get global rooms 
+        chatRooms = await chatsRef.get()
+      }
+      // Set empty response
+      if(chatRooms.empty){
+        commit('setChatRoomsCollection', null)  
+        commit('setEmptyResStatus', chatRooms.empty)
+        return
+      }
+      const chatRoomsCollection = await dispatch('constructCollection', chatRooms)
+      // Set chat romm collection
+      commit('setChatRoomsCollection', chatRoomsCollection)
     },
     // Construct Room Collections
     async constructCollection({commit}, rooms){
