@@ -26,8 +26,8 @@ export default {
   // ===== Set actions ===== //
 
     // Upload Room Photo
-    async uploadRoomPhoto({commit}, photo){
-      const storageRef = await firebase.storage().ref(`chatsPhoto/${UUID()}`).put(photo)
+    async uploadRoomPhoto({commit}, {path, photo}){
+      const storageRef = await firebase.storage().ref(`${path}/${UUID()}`).put(photo)
       return storageRef.ref.getDownloadURL()
     },
     // Create Chat Room  
@@ -52,6 +52,13 @@ export default {
       console.log(docRef);
       return docRef.id
     },
+    async joinUserToChatRoom({commit, getters}, chatId){
+      const { id } = getters.getUser
+      const docRef = await firebase.firestore().collection('chats').doc(chatId)
+      return await docRef.update({
+        users: firebase.firestore.FieldValue.arrayUnion(id),
+      })
+    },
     // Send messages to chat (chatId)
     async sendMessage({commit, getters}, {chatId, content, photoURL = null}){
       const { id } = getters.getUser
@@ -69,6 +76,11 @@ export default {
     },
 
   //===== Get actions ===== //
+    //Get Chat Room by id
+    async getChatRoomById({commit}, chatId){
+      const chatsRef = await firebase.firestore().collection('chats')
+      return await (await chatsRef.doc(chatId).get()).data()
+    } ,
     // Get Chat Rooms
     async getChatRooms({commit, dispatch, getters}, typeRooms){
       // Load
@@ -81,7 +93,7 @@ export default {
       // Check on type rooms
       let chatRooms = []
       if(typeRooms === 'scoped'){
-        // Get scoped rooms 
+        // Get scoped rooms
         chatRooms = await chatsRef.where('users', 'array-contains', id).get()
       }  
       else if(typeRooms === 'global'){
