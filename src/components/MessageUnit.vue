@@ -2,46 +2,85 @@
   <div class="message-unit">
     <div :class="{'scoped': isScopedMessage}" class="message">
       <div class="message-view">
-        <div class="avatar">
-          <img src="https://images.wallpaperscraft.ru/image/chelovek_skala_kamen_150751_300x168.jpg" alt="">
-        </div>
+        <vs-avatar size="30" circle class="avatar">
+          <img v-if="getPhoto" :src="getPhoto">
+          <i v-else class='bx bx-user'></i>
+        </vs-avatar>
         <div class="content">
-          <div class="autor-name">Jhon Smith</div>
+          <div class="autor-name">{{getAuthor}}</div>
           <div v-if="message.photoURL" class="photo">
             <img :src="message.photoURL" alt="">
           </div>
           <div class="text">{{message.content}}</div>    
         </div>
       </div>
-      <div class="timestapm">12.05.2020</div>
+      <div class="timestapm">{{createdAt}}</div>
     </div>
   </div>
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import {mapGetters,mapActions} from 'vuex'
   export default {
     name: 'MessageUnit',
-    props: ['message'],
     computed:{
       ...mapGetters([
-        'getUser'
+        'getUser',
       ]),
+      createdAt(){
+        const { createdAt } = this.message
+        const dayTime = 86400000
+        const diff = Date.now() - createdAt
+        if(diff > dayTime * 7) 
+          return new Date(createdAt).toLocaleDateString()
+        if(diff > dayTime)
+          return new Date(createdAt).toDateString()
+        else
+          return new Date(createdAt).toLocaleTimeString()
+      },
+      getAuthor(){
+        return this.authorMsg.displayName
+      },
+      getPhoto(){
+        return this.authorMsg.photoURL
+      },
       isScopedMessage(){
         return this.message.userId === this.getUser.id 
       }
     },
+    methods: {
+      ...mapActions([
+        'getUserFromCollection'
+      ])
+    },
+    props: ['message', 'authorsMessageCollection'],
     data:()=>({
+      authorMsg: {}
     }),
+    async created(){
+      const author = this.authorsMessageCollection[this.message.userId]
+      console.log(author);
+      if(author) 
+        this.authorMsg = author
+      else{
+        this.authorMsg = await this.getUserFromCollection(this.message.userId)
+        this.$emit('setAuthorMessage', {
+          userId: this.message.userId,
+          userData: this.authorMsg
+        })
+      }
+    }
   }
 </script>
 
 <style lang="scss" scoped>
 .message{
+  user-select: none;
   display: flex;
   align-items: flex-start;
   margin: 20px 0;
   justify-content: space-between;
+  // justify-content: space-around;
   &-view{
     display: flex;
   }
@@ -56,7 +95,7 @@ import {mapGetters} from 'vuex'
     }
     .content{
       margin-right: 0;
-      border-radius: 25px 25px 2px 25px;
+      border-radius: 15px 15px 2px 15px;
       background: rgba($main-color, .8);
     }
   }
@@ -78,7 +117,7 @@ import {mapGetters} from 'vuex'
   padding: 10px;
   color: $text-color;
   background: #28293D;
-  border-radius: 2px 25px 25px 25px;
+  border-radius: 2px 15px 15px 15px;
   margin-left: 5px;
   margin-right: 10px;
   @include setFontSize(14px);
