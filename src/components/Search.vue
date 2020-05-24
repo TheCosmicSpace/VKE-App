@@ -1,6 +1,6 @@
 <template>
   <div class="search-room">
-    <vs-input v-model="searchRoom" @input="onSearchEmit" autocomplete="off" placeholder="Enter room name">
+    <vs-input :value="searchNameRoom" @input="onSearchEmit" autocomplete="off" placeholder="Enter room name">
       <template #icon>
         <i class='bx bx-search'></i>
       </template>
@@ -20,8 +20,8 @@
 
 <script>
   export default {
+    props: ['searchNameRoom'],
     data:()=>({
-      searchRoom: '',
       typeRooms: 'scoped'
     }),
     methods: {
@@ -33,6 +33,9 @@
       typeRooms(){
         this.$emit('toggleTypeRooms', this.typeRooms)
       }
+    },
+    mounted(){
+      this.$emit('toggleTypeRooms', this.typeRooms)
     }
   }
 </script>
