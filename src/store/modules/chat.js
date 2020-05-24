@@ -3,6 +3,9 @@ import 'firebase/auth'
 import 'firebase/firestore'
 import 'firebase/storage'
 
+
+let lastMessages = {}, initMessagesArea = true, tempMsg = false
+let unsubscribe = function (){}
 // Generate random str form named room photo
 function UUID(){
   return (Date.now() + Math.floor(Math.random() * 100)).toString()
@@ -12,7 +15,10 @@ export default {
   state: {
     chatRoomsCollection: null,
     emptyResStatus: false,
-    prevTypeRooms: 'scoped'
+    prevTypeRooms: 'scoped',
+    // ===
+    messagesArea: [],
+    prevMsgLen: 0,
   },
   mutations: {
     // Set chat rooms collection
@@ -20,9 +26,28 @@ export default {
     // Set Rersonse Status
     setEmptyResStatus: (state, status) => state.emptyResStatus = status,
     // Change prev type rooms
-    changePrevTypeRooms: (state, type) => state.prevTypeRooms = type
+    changePrevTypeRooms: (state, type) => state.prevTypeRooms = type,
+    // ===
+    // Set messages area 
+    setMessagesArea: (state, messages) => {
+      // if(state.prevMsgLen === state.prevMsgLen  + messages.length) return
+      state.messagesArea.unshift(...messages)
+    },
+    // Set new message
+    setNewMessage: (state, message) => state.messagesArea.push(...message),
+    // ===
+    dectroyMessagesArea: (state) => {
+      state.messagesArea = []
+      lastMessages = {}
+      initMessagesArea = true
+      tempMsg = false
+      unsubscribe()
+    }
   },
   actions: {
+    dectroyMessagesArea({commit}){
+      commit("dectroyMessagesArea")
+    },  
   // ===== Set actions ===== //
 
     // Upload Room Photo
@@ -36,28 +61,59 @@ export default {
       const data = {
         ...payload,
         adminId: id,
-        createAt: Date.now(),
+        createdAt: Date.now(),
         count: 0,
-        messages: [],
         users: [id]
       }
-      console.log(data);
+      //console.log(data);
       // Create Chat Room 
       const docRef = await firebase.firestore().collection('chats').add(data)
-      // Add first message
+
+      //Add first message
       await dispatch('sendMessage', {
         chatId: docRef.id,
         content: `${displayName} created chat room!`
       }) 
-      console.log(docRef);
+      //console.log(docRef);
       return docRef.id
     },
-    async joinUserToChatRoom({commit, getters}, chatId){
+    async joinUserToChatRoom({commit, dispatch, getters}, chatId){
       const { id } = getters.getUser
       const docRef = await firebase.firestore().collection('chats').doc(chatId)
       return await docRef.update({
         users: firebase.firestore.FieldValue.arrayUnion(id),
       })
+    },
+    async tempMessage({commit, dispatch, getters}, {chatId, content, photo = null}){
+      const { id } = getters.getUser
+      //console.log(chatId, content, photo);
+
+      // Create temp url
+      let tempURL
+      if(photo) tempURL = URL.createObjectURL(photo)
+      else tempURL = null
+      const tempData = {
+        userId: id,
+        content,
+        photoURL: tempURL,
+        createdAt: Date.now()
+      }
+
+      tempMsg = true
+      commit('setNewMessage', [tempData])
+      // Send messages
+      const url = photo ? await dispatch('uploadRoomPhoto', {
+        path: 'messagesPhoto',
+        photo
+      }) : null
+      const messageData = {
+        chatId,
+        content,
+        photoURL: url
+      }
+      await dispatch('sendMessage', messageData)
+      // Delete temp photo url
+      URL.revokeObjectURL(tempURL)
     },
     // Send messages to chat (chatId)
     async sendMessage({commit, getters}, {chatId, content, photoURL = null}){
@@ -66,16 +122,52 @@ export default {
         userId: id,
         content,
         photoURL,
-        createAt: Date.now()
+        createdAt: Date.now()
       }
       const docRef = await firebase.firestore().collection('chats').doc(chatId)
-      return await docRef.update({
-        messages: firebase.firestore.FieldValue.arrayUnion(data),
-        count: firebase.firestore.FieldValue.increment(1)
-      })
+      await docRef.collection('messages').add(data)
     },
 
   //===== Get actions ===== //
+    // Get Shapshot message
+    async getShapshotMessage({commit, dispatch}, chatId){
+      //console.log("initMessagesArea", initMessagesArea);
+      const chatRef = await firebase.firestore().collection('chats').doc(chatId)
+      const messages = await chatRef.collection('messages')
+      unsubscribe = messages.onSnapshot(snapshot => {
+        //console.log(snapshot); 
+        if (initMessagesArea) return initMessagesArea = false
+        if (tempMsg) return tempMsg = false
+        const newMessage = snapshot.docChanges().map(({doc}) => ({...doc.data(), id: doc.id}))
+        //console.log(newMessage);
+        commit('setNewMessage', newMessage)
+      })
+    },
+
+
+    // Get Last Msg by id
+    async getLastMsgById({dispatch}, chatId){
+      //console.log(chatId); 
+      const chatRef = await firebase.firestore().collection('chats').doc(chatId)
+      const msg = await chatRef.collection('messages').orderBy('createdAt','desc').limit(1).get()
+      const msgConstruct = await dispatch('constructCollection', msg)
+      return msgConstruct[0]
+    },
+    // Get Limited Message
+    async getChatRoomMessagesById({commit, dispatch}, chatId){
+      if(!lastMessages) return
+      //console.log("lastMessages", lastMessages);
+      const chatRef = await firebase.firestore().collection('chats').doc(chatId)
+      const messages = await chatRef
+        .collection('messages')
+        .orderBy('createdAt', 'desc')
+        .startAfter(lastMessages)
+        .limit(8)
+        .get()
+      lastMessages = messages.docs[messages.docs.length-1]
+      const messagesCollection = await dispatch('constructCollection', messages)
+      commit('setMessagesArea', messagesCollection.reverse())
+    },
     //Get Chat Room by id
     async getChatRoomById({commit}, chatId){
       const chatsRef = await firebase.firestore().collection('chats')
@@ -118,6 +210,8 @@ export default {
   getters: {
     getCollection: state => state.chatRoomsCollection,
     emptyResStatus: state => state.emptyResStatus,
-    prevTypeRooms: state => state.prevTypeRooms
+    prevTypeRooms: state => state.prevTypeRooms,
+    // ===
+    getMessagesArea: state => state.messagesArea
   }
 }
