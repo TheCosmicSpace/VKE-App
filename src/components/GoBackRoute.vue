@@ -2,7 +2,7 @@
   <div>
     <vs-button
         @click="goBackRoute"
-        color="#d5397b"
+        color="#E57373"
         circle
         icon
         floating

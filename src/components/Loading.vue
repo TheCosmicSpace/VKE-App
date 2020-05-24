@@ -16,7 +16,7 @@
         const loading = this.$vs.loading({
           target: this.$refs.content,
           type: this.getRandomTypeLoading,
-          color: "#d5397b"
+          color: "#E57373"
         })
       }
     },
