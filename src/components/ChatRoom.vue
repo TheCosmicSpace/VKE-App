@@ -20,13 +20,13 @@
             <span class="info__icon"><i class='bx bxs-group' ></i></span>
             <span>{{roomData.title}}</span>
           </div>
-          <div :class="{'loading': loadUser}" class="info__createAt">{{lastMsgCreatedAt}}</div>  
+          <div :class="{'loading': loadUser}" class="info__counterMsg info__counterMsg">{{msgCount}}</div>
         </div>
         <div class="info__footer">
           <div :class="{'loading': loadUser}" class="info__lastMsg info__lastMsg">
             <span class="info__lastUserName">{{lastMsgUser.displayName}}: </span>{{getLastMsg.content}}
           </div>
-          <div :class="{'loading': loadUser}" class="info__counterMsg info__counterMsg">{{msgCount}}</div>
+         <div :class="{'loading': loadUser}" class="info__createAt">{{lastMsgCreatedAt}}</div>
         </div>
       </div>
   </div>
@@ -48,7 +48,7 @@ import RoomMiddleware from '@/components/RoomMiddleware.vue'
         return this.roomData.photoURL
       },
       msgCount(){
-        return 5
+        return this.roomData.count
       },
       getLastMsg(){
        return this.lastMsg
