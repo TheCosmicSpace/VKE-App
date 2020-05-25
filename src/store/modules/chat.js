@@ -74,8 +74,7 @@ export default {
         chatId: docRef.id,
         content: `${displayName} created chat room!`
       }) 
-      //console.log(docRef);
-      return docRef.id
+      return { chatId: docRef.id, roomData: await (await docRef.get()).data() }
     },
     async joinUserToChatRoom({commit, dispatch, getters}, chatId){
       const { id } = getters.getUser
@@ -126,6 +125,9 @@ export default {
       }
       const docRef = await firebase.firestore().collection('chats').doc(chatId)
       await docRef.collection('messages').add(data)
+      await docRef.update({
+        count: firebase.firestore.FieldValue.increment(1)
+      })
     },
 
   //===== Get actions ===== //
@@ -199,6 +201,8 @@ export default {
         return
       }
       const chatRoomsCollection = await dispatch('constructCollection', chatRooms)
+      // Sort by count
+      chatRoomsCollection.sort((a, b) => b.count - a.count)
       // Set chat romm collection
       commit('setChatRoomsCollection', chatRoomsCollection)
     },
