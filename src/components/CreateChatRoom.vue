@@ -90,13 +90,20 @@ import { mapActions } from 'vuex'
         this.sending = true
         try{
           // Upload file and await response url
-          const url = this.selectedFile ? await this.uploadRoomPhoto(this.selectedFile) : null
+          const url = this.selectedFile ? 
+          await this.uploadRoomPhoto({
+            path: 'chatsPhoto',
+            photo: this.selectedFile
+          }) : null
+          
           const roomData = {
             ...this.room,
             photoURL: url
           }
-          const roomId = await this.createChatRoom(roomData)
-          console.log(roomId);
+          const room = await this.createChatRoom(roomData)
+          this.active = false
+          this.$router.push({name: 'ChatItem', params: room})
+          console.log(room);
         }
         catch(err){
           console.log(err);
@@ -123,61 +130,4 @@ import { mapActions } from 'vuex'
 
 <style lang="scss">
   @import '@/style/CreateChatRoomComponent/style.scss';
-</style>
-
-
-<style lang="stylus" scoped>
- getColor(vsColor, alpha = 1)
-      unquote("rgba(var(--vs-"+vsColor+"), "+alpha+")")
-  getVar(var)
-      unquote("var(--vs-"+var+")")
-  .con-content
-    display flex
-    align-items center
-    justify-content center
-    p
-      margin 20px 0px
-      position relative
-      display block
-      font-size .9rem
-  .not-margin
-    margin 0px
-    font-weight normal
-    padding 10px
-  .con-form
-    width 100%
-    .flex
-      display flex
-      align-items center
-      justify-content space-between
-      a
-        font-size .8rem
-        opacity .7
-        &:hover
-          opacity 1
-    .vs-checkbox-label
-      font-size .8rem
-    .vs-input-content
-      margin 10px 0px
-      width calc(100%)
-      .vs-input
-        width 100%
-  .footer-dialog
-    display flex
-    align-items center
-    justify-content center
-    flex-direction column
-    width calc(100%)
-    .new
-      margin 0px
-      margin-top 20px
-      padding: 0px
-      font-size .7rem
-      a
-        color getColor('primary') !important
-        margin-left 6px
-        &:hover
-          text-decoration underline
-    .vs-button
-      margin 0px
 </style>
