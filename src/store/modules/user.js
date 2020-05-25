@@ -75,14 +75,15 @@ export default {
     },
     async getUserFromCollection({getters}, userId){
       const user = await firebase.firestore().collection('users').doc(userId).get()
-      console.log(user.exists);
+      // console.log(user.exists);
       return user.exists ? await user.data() : {}
       // return await (await firebase.firestore().collection('users').doc(userId).get()).data()
     },
     //=== StateChanged ===
     async stateChanged({commit, dispatch}, user){
       if (user) {
-        const userFromCollection = await dispatch("getUserFromCollection", (user.uid || user.id))
+        const userId = (user.uid || user.id)
+        const userFromCollection = await dispatch("getUserFromCollection", userId)
         console.log({...user, ...userFromCollection});
         commit("setUser", new User({...userFromCollection, ...user}))
       }
