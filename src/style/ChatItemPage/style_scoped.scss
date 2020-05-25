@@ -1,0 +1,57 @@
+// @import '@/style/ChatRoomComponent/style_scoped.scss';
+.info{
+  margin-left: 20px;
+  &__top,
+  &__footer{
+    padding: 0;
+    margin: 2px 0;
+  }
+  &__title{
+    @include setFontSize(14px);
+  }
+}
+.chat{
+  position: relative;
+  color: $text-color;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 60px;
+  &-info{
+    display: flex;
+  }
+  &-header{
+    position: relative;
+    padding: 10px;
+    border-radius:0 0 8px 8px;
+    justify-content: center;
+    box-shadow: 0px 3px 35px -20px rgba($main-color, 0.65);
+    display: flex;
+    align-items: center;
+    &__title{
+      margin-left: 15px;
+      display: flex;
+      align-items: center;
+    }
+    &__content{
+      display: flex;
+      align-items: center;
+    }
+  }
+  &-backRoute{
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%); 
+  }
+}
+.create{
+  flex-basis: 50px;
+  flex-shrink: 0;
+
+}
+.messages-area{
+  flex: 1;
+  overflow: auto;
+  padding: 0 10px 50px 10px;
+}
