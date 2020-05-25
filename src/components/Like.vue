@@ -78,15 +78,15 @@ import { mapActions, mapGetters } from 'vuex'
     },
     data:()=>({
       liked: null,
-      likedUsers: null,
+      likedList: null,
       likeCounter: null
     }),
     created(){
       console.log("LIKEE");
-      this.likedUsers = this.getSomePost(this.idPost).likedUsers;
-      this.likeCounter = this.likedUsers.length
+      this.likedList = [...this.getSomePost(this.idPost).likedUsers];
+      this.likeCounter = this.likedList.length
       if(!this.getUser) return
-      this.liked = this.searchOnLike(this.likedUsers, this.getUser.id)
+      this.liked = this.searchOnLike(this.likedList, this.getUser.id)
     }
   }
 </script>
