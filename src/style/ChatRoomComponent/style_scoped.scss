@@ -18,8 +18,8 @@ $duration: 1.6s;
     background-position: -100%;
   }
 }
-@mixin loading($min-width, $height){
-  min-width: $min-width;
+@mixin loading($width, $height){
+  width: $width;
   height: $height;
   position: relative;
   border-radius: 6px;
@@ -37,6 +37,7 @@ $duration: 1.6s;
 }
 
 .chat-room{
+  user-select: none;
   position: relative;
   margin: 15px 0;
   background: #28293d;
@@ -75,11 +76,13 @@ $duration: 1.6s;
       ::before{
         content: '';
         position: absolute;
+        left: 0;
+        top: 0;  
         width: 100%;
         height: 100%;
         z-index: 9;
         background: $theme-bg;
-        border-radius: inherit;
+        border-radius: 50%;
       }
     }
   }
