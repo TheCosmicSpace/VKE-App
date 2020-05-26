@@ -29,13 +29,15 @@
       <!-- Chat Header -->
 
       <!-- MEssage Area -->
-      <div class="messages-area" v-chat-scroll="{always: false, smooth: true,}" @v-chat-scroll-top-reached="customMethod">
+      <div class="messages-area-wrap" v-chat-scroll="{always: false, smooth: true,}" @v-chat-scroll-top-reached="customMethod">
+        <div class="messages-area">
           <MessageUnit
             v-for="message in getMessagesArea"
             :key="message.id"
             :message="message" 
             :authorsMessageCollection="authorsMessageCollection"
             @setAuthorMessage="setAuthorMessage"/>
+        </div>  
       </div>
 
       <!-- Create Message -->
@@ -89,8 +91,11 @@
       authorsMessageCollection: {}
     }),
     async created(){
+      // console.log(this.$root.$children[0].$refs.BottomNavigation.$el.style.display = 'none');
+      
       console.log(this.$route.params);
       const { chatId, roomData } = this.$route.params
+      console.log("roomData", roomData);
       if(!roomData) this.$router.replace({name: 'Chats'})
       this.chatData = roomData
       console.log(this.chatData);
