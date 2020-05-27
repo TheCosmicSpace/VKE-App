@@ -4,7 +4,8 @@ import Vuex from 'vuex'
 import user from './modules/user'
 import post from './modules/post'
 import chat from './modules/chat'
-import deviceDetector from './modules/device-detector'
+import deviceDetector from './modules/deviceDetector'
+import installPrompt from './modules/installPrompt'
 
 Vue.use(Vuex)
 
@@ -13,7 +14,8 @@ export default new Vuex.Store({
     user,
     post,
     chat,
-    deviceDetector
+    deviceDetector,
+    installPrompt
   },
   strict: process.env.NODE_ENV !== 'production'
 })
