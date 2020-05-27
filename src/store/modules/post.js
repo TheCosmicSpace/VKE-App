@@ -1,4 +1,4 @@
-import firebase, { firestore } from 'firebase/app'
+import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
 import 'firebase/storage'  
@@ -14,7 +14,7 @@ export default {
     postsCollection: [],
     isEmptyResponse: false,
     lastSize: 0,
-    limit: 3
+    limit: 5
     // lastVisible: {},
   },
   mutations: {
@@ -24,7 +24,11 @@ export default {
     },
     addNewPost: (state, newPost) => state.postsCollection.unshift(...newPost),
     setLastSize: (state, value) => state.lastSize = value,
-    setIsEmptyResponse: (state, value) => state.isEmptyResponse = value
+    setIsEmptyResponse: (state, value) => state.isEmptyResponse = value,
+    toggleLike: (state, {currPost, userId, likeAction}) => {
+      if(likeAction) currPost.likedUsers.push(userId)
+      else currPost.likedUsers = currPost.likedUsers.filter(uid => uid !== userId)
+    }
     // setLastVisible: (state, value) => state.lastVisible = Object.assign(value), 
   },
   actions: {
@@ -60,17 +64,19 @@ export default {
         // offsetRef.on("value", function(snap) {
         //   postData.createAt = new Date().getTime() + snap.val()
         // });
-
       // Save post to db
       const postRes = await firebase.firestore().collection('posts').add({...postData})
       console.log(postRes)
     },
-    async toLikePost({commit}, {postId, userId, likeAction}){
+    // Like Post
+    async toLikePost({commit, getters}, {postId, userId, likeAction}){
       if(likeAction) await firebase.firestore().collection('posts').doc(postId)
-      // .set({likedUsers: [userId]}, { merge: true })
         .update({likedUsers: firebase.firestore.FieldValue.arrayUnion(userId)})
       else await firebase.firestore().collection('posts').doc(postId)
         .update({likedUsers: firebase.firestore.FieldValue.arrayRemove(userId)})
+
+      const currPost = getters.getSomePost(postId)
+      commit('toggleLike', {currPost, userId, likeAction})   
     },
   // Get Data Actions ===  
     async addEventOnSnapshot({commit, dispatch, getters}){
@@ -92,16 +98,15 @@ export default {
         .startAfter(lastVisible)
         .limit(getters.getLimit)
         .get()
-      commit("setLastSize", snapshot.size)
-      commit("setIsEmptyResponse", snapshot.empty)
-      if(snapshot.empty) return 
+        commit("setLastSize", snapshot.size)
+        if(snapshot.empty) return commit("setIsEmptyResponse", snapshot.empty)
 
-      console.log(snapshot);
-      lastVisible = snapshot.docs[snapshot.docs.length-1]
-      const snapshotCollection = snapshot.docs.map(doc => ({...doc.data(), id: doc.id}))
-      const modifiedCollection = await dispatch("addAuthorPost", snapshotCollection)
-      console.log("modifiedCollection", modifiedCollection);
-      commit("setPostsCollection", modifiedCollection)
+        console.log(snapshot);
+        lastVisible = snapshot.docs[snapshot.docs.length-1]
+        const snapshotCollection = snapshot.docs.map(doc => ({...doc.data(), id: doc.id}))
+        const modifiedCollection = await dispatch("addAuthorPost", snapshotCollection)
+        console.log("modifiedCollection", modifiedCollection);
+        commit("setPostsCollection", modifiedCollection)
       },
       async addAuthorPost({commit}, snapshotCollection){
       let postsCollection = [];
