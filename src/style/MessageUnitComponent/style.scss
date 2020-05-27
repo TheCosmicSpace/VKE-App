@@ -5,8 +5,14 @@
   margin: 20px 0;
   justify-content: space-between;
   // justify-content: space-around;
-  &-view{
+  &-view{    
     display: flex;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  .content{
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
   &.scoped{
     .timestapm,
@@ -24,18 +30,13 @@
     }
   }
 }
-.avatar img{
-  width: 35px;
-  height: 35px;
+.avatar{
   min-width: 35px;
   min-height: 35px;
+}
+.avatar img{
   object-fit: cover;
   border-radius: 50%;
-}
-.autor-name{
-  font-style: italic;
-  padding: 3px 0;
-  @include setFontSize(10px);
 }
 .content{
   padding: 10px;
@@ -55,8 +56,16 @@
       max-height: 350px;
     }
   }
+  .text{word-break: break-word;}
+  .autor-name{
+    font-style: italic;
+    padding: 3px 0;
+    @extend %text-overflow;
+    @include setFontSize(10px);
+  }
 }
 .timestapm{
   align-self: center;
+  min-width: 46px;
   @include setFontSize(10px)
 }

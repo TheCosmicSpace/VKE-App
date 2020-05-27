@@ -29,6 +29,8 @@
   &__username{
     @include setFontSize(1em);
     padding-bottom: 7px;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
   &__btn-group{
     @extend %flexCentering;
