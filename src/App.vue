@@ -1,7 +1,7 @@
 <template>
   <div ref="app" id="app">
     <InstallPrompt v-if="canInstallPrompt && notMiddleware"/>
-    <transition name="modal" mode="out-in">
+    <transition name="view" mode="out-in">
       <router-view/>
     </transition>
     <BottomNavigation ref="BottomNavigation"/>
@@ -38,7 +38,6 @@ import InstallPrompt from '@/components/InstallPrompt.vue'
     }),
     mounted(){
       const { name } = this.$router.currentRoute
-      console.log(name);
       this.elBottomNav = this.$refs.BottomNavigation.$el
       this.elBottomNav.addEventListener('hideBottomNavigation', (e) => {
         this.$refs.BottomNavigation.toggleHidden(e.detail.state)
@@ -74,5 +73,14 @@ a{
 }
 .container{
   padding: 0 10px;
+}
+.view-enter-active, .view-leave-active {
+  transition: opacity .15s ease-in-out;
+}
+.view-enter, .view-leave-to {
+  opacity: 0;
+}
+.view-enter-to, .view-leave {
+  opacity: 1;
 }
 </style>

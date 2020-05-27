@@ -61,7 +61,6 @@ export default {
       circle.style.clipPath = `circle(0vh at ${x}px ${y}px)`
       setTimeout(()=>circle.style.clipPath = `circle(100vh at ${x}px ${y}px)`, 0)
       this.$el.append(circle)
-      console.log(this.$el);
     },
     comeToAddPost(){
       this.$router.push({name: "AddPost"})
@@ -73,29 +72,22 @@ export default {
       this.createCirlcePath(e)
       // Push to post
       setTimeout(()=>{
-        this.$router.push({name: 'PostItem', params: {postId: identify}});
-        console.log("ELLL", this.$el);
+        this.$router.push({name: 'PostItem', params: {postId: identify}})
       }, 500)
     },
     loadMore(entries, observer){
-      this.loading  = true;
-      console.log(entries, observer);
+      this.loading  = true
       entries.forEach(entry => {
         if(entry.isIntersecting){
           this.observer.unobserve(entry.target)
           this.callPostsCollection()
-          console.log("SEE");
         }
       })
-      // alert("SEE")
-      
       // this.LoadMore()
     },
     addNewTarget(){
-      this.loading = false;
-      console.log(this.$refs.posts.lastChild);
-      // console.log(nodes);
-      this.observer.observe(this.$refs.posts.lastChild);
+      this.loading = false
+      this.observer.observe(this.$refs.posts.lastChild)
     }
   },
   data:()=>({
@@ -109,12 +101,10 @@ export default {
     observer: null
   }),
   mounted(){
-    console.log(this.$el);
-    const targetNode = this.$refs.posts;
-    const config = { attributes: true, childList: true, subtree: false };
-    const observer = new MutationObserver(this.addNewTarget);
-    observer.observe(targetNode, config);
-    console.log(this.$el);
+    const targetNode = this.$refs.posts
+    const config = { attributes: true, childList: true, subtree: false }
+    const observer = new MutationObserver(this.addNewTarget)
+    observer.observe(targetNode, config)
     
     // Parent all posts
     this.observer = new IntersectionObserver(this.loadMore, this.options)
@@ -122,7 +112,7 @@ export default {
     else this.observer.observe(this.$refs.posts.lastChild)
   },
   destroyed() {
-    this.observer.disconnect();
+    this.observer.disconnect()
   }
 }
 </script>

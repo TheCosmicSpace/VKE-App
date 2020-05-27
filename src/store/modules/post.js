@@ -20,7 +20,6 @@ export default {
   mutations: {
     setPostsCollection: (state, postsCollection) => {
       state.postsCollection.push(...postsCollection)
-      console.log(state.postsCollection)
     },
     addNewPost: (state, newPost) => state.postsCollection.unshift(...newPost),
     setLastSize: (state, value) => state.lastSize = value,
@@ -49,7 +48,6 @@ export default {
       const userId = getters.getUser.id
       //Get url post's photo
       const postPhotoURL = postPhoto ? await dispatch("uploadPostPhoto", postPhoto) : await dispatch("defaultPostPhoto")
-      console.log(postPhotoURL)
       // Create Post Unit Obj
       const postData = {
         postTitle,
@@ -66,7 +64,6 @@ export default {
         // });
       // Save post to db
       const postRes = await firebase.firestore().collection('posts').add({...postData})
-      console.log(postRes)
     },
     // Like Post
     async toLikePost({commit, getters}, {postId, userId, likeAction}){
@@ -81,12 +78,9 @@ export default {
   // Get Data Actions ===  
     async addEventOnSnapshot({commit, dispatch, getters}){
       await firebase.firestore().collection('posts').onSnapshot(snapshot => {
-        console.log(snapshot);
-        console.log(getters.getPostsCollection);
         if(initialReq || snapshot.size === getters.getPostsCollection.length) return initialReq = false
-        console.log("snapshot", snapshot.docChanges());
+        // console.log("snapshot", snapshot.docChanges());
         const snapshotNew = snapshot.docChanges().map(({doc}) => ({...doc.data(), id: doc.id}))
-        console.log("snapshotChanges", snapshotNew);
         dispatch("addAuthorPost", snapshotNew)
         .then(modifiedDoc => commit("addNewPost", modifiedDoc))
       })
@@ -101,11 +95,9 @@ export default {
         commit("setLastSize", snapshot.size)
         if(snapshot.empty) return commit("setIsEmptyResponse", snapshot.empty)
 
-        console.log(snapshot);
         lastVisible = snapshot.docs[snapshot.docs.length-1]
         const snapshotCollection = snapshot.docs.map(doc => ({...doc.data(), id: doc.id}))
         const modifiedCollection = await dispatch("addAuthorPost", snapshotCollection)
-        console.log("modifiedCollection", modifiedCollection);
         commit("setPostsCollection", modifiedCollection)
       },
       async addAuthorPost({commit}, snapshotCollection){

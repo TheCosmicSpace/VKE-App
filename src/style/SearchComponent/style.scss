@@ -36,7 +36,11 @@ $icon-color: #1f1f2e;
   }
 
   .vs-select{
+    &__label{
+      @extend %userSelect; 
+    }
     &-content{
+      @extend %userSelect;
       max-width: 120px; 
     }
     &__input{
@@ -50,6 +54,7 @@ $icon-color: #1f1f2e;
       padding: 13px 5px 13px 10px;
       &:focus, 
       &:hover{
+        @extend %userSelect;
         transform: none;
         border-radius: 0 12px 12px 0;
       } 
@@ -69,6 +74,7 @@ $icon-color: #1f1f2e;
     }
   }
   .vs-select.activeOptions .vs-select__input{
+    @extend %userSelect;
     background: $input-bg;
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
@@ -78,7 +84,6 @@ $icon-color: #1f1f2e;
 // ====
 .vs-select{
   overflow-x: hidden;
-  @extend %userSelect;
   &__options{
     background: $input-bg;
     box-shadow: 0px -5px 14px -9px rgba(0,0,0,0.75);

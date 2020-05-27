@@ -1,41 +1,43 @@
 <template>
   <div class="chats">
-    <!-- Create Chat Room Dialog -->
-    <CreateChatRoom ref="CreateChatRoom"/>
-    <!-- Title -->
-    <h2 class="chats-title page-title">
-      <span class="page-title__text">Chats</span>
-      <vs-button
-        v-if="checkByAdmin"
-        @click="openCreateChatRoomDialog"
-        circle
-        icon
-        floating
-        class="create-btn">
-        <i class='bx bx-plus' ></i>
-      </vs-button>
-    </h2>
-    <!-- Search Line -->
-    <Search
-      :searchNameRoom="searchNameRoom"
-      @searchRoom="searchRoom" 
-      @toggleTypeRooms="toggleTypeRooms" 
-      ref="Search"/>
-    <!-- ChatRooms -->
-    <div class="chats-rooms">
-      <!-- Show chat rooms -->
-      <template v-if="!noneChatRooms">
-        <ChatRoom 
-          v-for="chat in filteredCollection"
-          :currentTypeRooms="currentTypeRooms"
-          :key="chat.id" 
-          :roomData="chat"/>
-      </template>
-      <!-- Show alert -->
-      <NoneRooms v-if="noneChatRooms"/>
+    <div class="container">
+      <!-- Create Chat Room Dialog -->
+      <CreateChatRoom ref="CreateChatRoom"/>
+      <!-- Title -->
+      <h2 class="chats-title page-title">
+        <span class="page-title__text">Chats</span>
+        <vs-button
+          v-if="checkByAdmin"
+          @click="openCreateChatRoomDialog"
+          circle
+          icon
+          floating
+          class="create-btn">
+          <i class='bx bx-plus' ></i>
+        </vs-button>
+      </h2>
+      <!-- Search Line -->
+      <Search
+        :searchNameRoom="searchNameRoom"
+        @searchRoom="searchRoom" 
+        @toggleTypeRooms="toggleTypeRooms" 
+        ref="Search"/>
+      <!-- ChatRooms -->
+      <div class="chats-rooms">
+        <!-- Show chat rooms -->
+        <template v-if="!noneChatRooms">
+          <ChatRoom 
+            v-for="chat in filteredCollection"
+            :currentTypeRooms="currentTypeRooms"
+            :key="chat.id" 
+            :roomData="chat"/>
+        </template>
+        <!-- Show alert -->
+        <NoneRooms v-if="noneChatRooms"/>
+      </div>
+      <!-- Loadig -->
+      <Loading v-if="!emptyResStatus && loadingRooms" />
     </div>
-    <!-- Loadig -->
-    <Loading v-if="!emptyResStatus && loadingRooms" />
   </div>
 </template>
 
@@ -75,16 +77,10 @@ import { mapGetters, mapActions } from 'vuex'
     },
     methods: {
       ...mapActions([
-        'getChatRooms'
+        'getChatRooms',
       ]),
-
-      // Create Chat Room Logic
-      createChatRoom(){
-        console.log("create");
-      },
       searchRoom(nameRoom){
         this.searchNameRoom = nameRoom
-        console.log(nameRoom);
       },
       // Toggle type room logic
       async toggleTypeRooms(typeRooms){
@@ -94,7 +90,7 @@ import { mapGetters, mapActions } from 'vuex'
         try{
           await this.getChatRooms(typeRooms)
         }catch(err){
-          console.log("TYPE ROOMS", err)
+          //console.log("TYPE ROOMS", err)
         }
         this.loadingRooms = false  
       },
@@ -110,11 +106,8 @@ import { mapGetters, mapActions } from 'vuex'
     }),
     watch: {
       getUser(){
-        console.log("Watch", this.getUser);
         this.toggleTypeRooms(this.$refs.Search.typeRooms);
       }
-    },
-    created(){
     }
   }
 </script>

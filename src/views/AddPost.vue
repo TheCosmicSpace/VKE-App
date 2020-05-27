@@ -65,7 +65,7 @@
 
 <script>
 import ProgressText from "@/components/ProgressText.vue"
-import {mapActions} from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: "AddPost",
   components: {
@@ -91,8 +91,6 @@ export default {
       // Create temp url
       if(this.postPhoto) this.tempURL = URL.createObjectURL(this.postPhoto)
       else this.tempURL = null
-
-      console.log(this.postPhoto)
     },
     deletePhoto(){
       // Delete prev temp url
@@ -102,7 +100,6 @@ export default {
     },
     toSend(){
       if(this.success){
-        console.log(this.success);
         this.postTitle = ''
         this.postText = ''
         this.postPhoto = null
@@ -139,6 +136,9 @@ export default {
     titleLimit: 50 
   }),
   computed: {
+    ...mapGetters([
+      'getUser'
+    ]),
     getLengthPostTitle(){
       return this.postTitle.length
     },
@@ -148,6 +148,9 @@ export default {
     getTempURL(){
       return `url(${this.tempURL})`
     },
+  },
+  created(){
+    if(!(this.getUser && this.getUser.admin)) this.$router.go(-1)
   }
 }
 </script>

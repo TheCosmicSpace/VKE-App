@@ -35,7 +35,7 @@
   min-height: 35px;
 }
 .avatar img{
-  object-fit: cover;
+  @extend %fullImg;
   border-radius: 50%;
 }
 .content{

@@ -100,7 +100,6 @@ import { mapActions } from 'vuex'
         URL.revokeObjectURL(this.tempURL)
         // assuming that this file has any extension
         const extension = this.selectedFile.name.match(/(?<=\.)\w+$/g)[0].toLowerCase();
-        console.log(extension, "extension");
 
         if(!['jpg', 'jpeg', 'png', 'svg', 'webp'].includes(extension)){
           this.openNotification({
@@ -117,7 +116,6 @@ import { mapActions } from 'vuex'
           this.$refs.msgValue.textContent = ''
           this.openPreloadPhoto = true
         }
-        console.log(extension);
         e.target.value= ''
       }
     },

@@ -1,5 +1,5 @@
 <template>
-  <vs-dialog overflow-hidden v-model="active">
+  <vs-dialog overflow-hidden v-model="open">
     <template #header>
       <h3>
         Creating a room
@@ -73,7 +73,7 @@ import { mapActions } from 'vuex'
       ]),
       // Open/Close Dialog
       toggle(){
-        this.active = !this.active
+        this.open = !this.open
       },
       // Select Room Photo
       onFileSelected(e){
@@ -83,7 +83,6 @@ import { mapActions } from 'vuex'
         // Create temp url
         if(this.selectedFile) this.tempURL = URL.createObjectURL(this.selectedFile)
         else this.tempURL = null
-        console.log(this.selectedFile)
       },
       // Send From
       async sendForm(){
@@ -95,25 +94,23 @@ import { mapActions } from 'vuex'
             path: 'chatsPhoto',
             photo: this.selectedFile
           }) : null
-          
+
           const roomData = {
             ...this.room,
             photoURL: url
           }
           const room = await this.createChatRoom(roomData)
-          this.active = false
-          this.$router.push({name: 'ChatItem', params: room})
-          console.log(room);
+          this.sending = false
+          this.open = false
+          setTimeout(()=>this.$router.push({name: 'ChatItem', params: room}), 0)
         }
         catch(err){
           console.log(err);
         }
-        this.sending = false
       }
     },
-
     data:() => ({
-      active: false,
+      open: false,
       tempURL: null,
       selectedFile: null,
       sending: false,

@@ -2,7 +2,7 @@ import DeviceDetector from "device-detector-js";
  
 const deviceDetector = new DeviceDetector();
 const deviceParse = deviceDetector.parse(window.navigator.userAgent);
-console.log(deviceParse);
+// console.log(deviceParse);
 
 export default {
   state: {

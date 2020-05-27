@@ -40,13 +40,11 @@ export default {
       const userId = getters.getUser.id
       // Save file to folder usersAvatars with name current user.id 
       const storageRef = await firebase.storage().ref(`usersAvatars/${userId}`).put(file)
-      console.log(storageRef);
       // Return Download URL 
       return storageRef.ref.getDownloadURL()
     },
     // Update Profile
     async updateProfile({commit, dispatch}, editData){
-      console.log("editData", editData)
       const user = await firebase.auth().currentUser
       await user.updateProfile({...editData})
       await dispatch("stateChanged", user)
@@ -54,18 +52,16 @@ export default {
     async upgradeToAdmin({getters, dispatch}, key){
       if(secretKey !== key) return false
       const userId = getters.getUser.id
-      console.log("userId", userId);
       await firebase.firestore().collection('users').doc(userId).update({
         admin: true
       })
       const user = await dispatch("getUserFromCollection", userId)
-      console.log(user);
       await dispatch("stateChanged", user)
+      return true
     },
     // Save User To Collection
     async saveUserToCollection({commit, getters}){
       const user = getters.getUser
-      console.log("user", user);
       await firebase.firestore().collection('users').doc(user.id).set({...user})
     },
     // Save Changes User To Collection
@@ -75,7 +71,6 @@ export default {
     },
     async getUserFromCollection({getters}, userId){
       const user = await firebase.firestore().collection('users').doc(userId).get()
-      // console.log(user.exists);
       return user.exists ? await user.data() : {}
       // return await (await firebase.firestore().collection('users').doc(userId).get()).data()
     },
@@ -84,7 +79,6 @@ export default {
       if (user) {
         const userId = (user.uid || user.id)
         const userFromCollection = await dispatch("getUserFromCollection", userId)
-        console.log({...user, ...userFromCollection});
         commit("setUser", new User({...userFromCollection, ...user}))
       }
       else commit("setUser", null)

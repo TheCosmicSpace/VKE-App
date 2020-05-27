@@ -39,7 +39,6 @@ import { mapGetters, mapMutations } from 'vuex'
         this.installPrompt.prompt()
         this.installPrompt.userChoice
         .then(choiceResult => {
-          console.log(choiceResult);
           if(choiceResult.outcome === 'accepted')
             this.setInstallPrompt(null)
         })

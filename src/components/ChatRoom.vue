@@ -77,7 +77,6 @@ import RoomMiddleware from '@/components/RoomMiddleware.vue'
       },
       comeToChat(){
         this.$router.push({name: 'ChatItem', params: {chatId: this.roomData.id, roomData: this.roomData}});
-        //console.log("Come to chat: ", this.roomData.id);
       },
       // Check on includes user in room
       checkOnIncludes(){
@@ -92,10 +91,8 @@ import RoomMiddleware from '@/components/RoomMiddleware.vue'
       lastMsgUser: ''
     }),
     async created(){
-      //console.log(this.roomData.id);
       this.lastMsg = await this.getLastMsgById(this.roomData.id)
-      //console.log(this.lastMsg);
-      this.lastMsgUser = await this.getUserFromCollection(this.getLastMsg.userId)
+      this.lastMsgUser = await this.getUserFromCollection(this.lastMsg.userId)
       this.loadUser = false
       //console.log(this.roomData, this.currentTypeRooms);
     }

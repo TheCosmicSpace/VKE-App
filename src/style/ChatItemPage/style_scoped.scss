@@ -10,6 +10,7 @@
   }
 }
 .chat{
+  @extend %userSelect;
   position: relative;
   color: $text-color;
   height: 100vh;

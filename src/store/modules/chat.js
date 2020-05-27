@@ -53,7 +53,7 @@ export default {
     // Upload Room Photo
     async uploadRoomPhoto({commit}, {path, photo}){
       const storageRef = await firebase.storage().ref(`${path}/${UUID()}`).put(photo)
-      return storageRef.ref.getDownloadURL()
+      return await storageRef.ref.getDownloadURL()
     },
     // Create Chat Room  
     async createChatRoom({commit, dispatch, getters}, payload){
@@ -65,8 +65,7 @@ export default {
         count: 0,
         users: [id]
       }
-      //console.log(data);
-      // Create Chat Room 
+      // Add to collection  
       const docRef = await firebase.firestore().collection('chats').add(data)
 
       //Add first message
@@ -76,6 +75,7 @@ export default {
       }) 
       return { chatId: docRef.id, roomData: await (await docRef.get()).data() }
     },
+    // Join User To Chat Room
     async joinUserToChatRoom({commit, dispatch, getters}, chatId){
       const { id } = getters.getUser
       const docRef = await firebase.firestore().collection('chats').doc(chatId)
@@ -85,7 +85,6 @@ export default {
     },
     async tempMessage({commit, dispatch, getters}, {chatId, content, photo = null}){
       const { id } = getters.getUser
-      //console.log(chatId, content, photo);
 
       // Create temp url
       let tempURL
@@ -133,15 +132,12 @@ export default {
   //===== Get actions ===== //
     // Get Shapshot message
     async getShapshotMessage({commit, dispatch}, chatId){
-      //console.log("initMessagesArea", initMessagesArea);
       const chatRef = await firebase.firestore().collection('chats').doc(chatId)
       const messages = await chatRef.collection('messages')
       unsubscribe = messages.onSnapshot(snapshot => {
-        //console.log(snapshot); 
         if (initMessagesArea) return initMessagesArea = false
         if (tempMsg) return tempMsg = false
         const newMessage = snapshot.docChanges().map(({doc}) => ({...doc.data(), id: doc.id}))
-        //console.log(newMessage);
         commit('setNewMessage', newMessage)
       })
     },
@@ -149,7 +145,6 @@ export default {
 
     // Get Last Msg by id
     async getLastMsgById({dispatch}, chatId){
-      //console.log(chatId); 
       const chatRef = await firebase.firestore().collection('chats').doc(chatId)
       const msg = await chatRef.collection('messages').orderBy('createdAt','desc').limit(1).get()
       const msgConstruct = await dispatch('constructCollection', msg)
@@ -158,13 +153,12 @@ export default {
     // Get Limited Message
     async getChatRoomMessagesById({commit, dispatch}, chatId){
       if(!lastMessages) return
-      //console.log("lastMessages", lastMessages);
       const chatRef = await firebase.firestore().collection('chats').doc(chatId)
       const messages = await chatRef
         .collection('messages')
         .orderBy('createdAt', 'desc')
         .startAfter(lastMessages)
-        .limit(8)
+        .limit(10)
         .get()
       lastMessages = messages.docs[messages.docs.length-1]
       const messagesCollection = await dispatch('constructCollection', messages)

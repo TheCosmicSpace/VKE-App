@@ -67,9 +67,8 @@ import { mapActions, mapGetters } from 'vuex'
         if(!this.getUser) return this.$router.replace({name: 'Auth'})
         this.liked = !this.liked
         this.liked ? this.likeCounter++ : this.likeCounter--
-        console.log("LIKE ACTION", this.liked);
         this.toLikePost({postId: this.idPost, userId: this.getUser.id, likeAction: this.liked})
-        .then(res => console.log(res))
+        .then(res => {})
         .catch(err => console.log(err))
       },
       searchOnLike(likedUsersCollection, userId){
@@ -82,7 +81,6 @@ import { mapActions, mapGetters } from 'vuex'
       likeCounter: null
     }),
     created(){
-      console.log("LIKEE");
       this.likedList = [...this.getSomePost(this.idPost).likedUsers];
       this.likeCounter = this.likedList.length
       if(!this.getUser) return

@@ -30,7 +30,7 @@
           Default
         </template>
       </vs-switch>
-      <div v-if="upgrade" class="key-input">
+      <div v-if="upgrade" class="key-input-admin">
         <vs-input v-model="key" placeholder="Secret Key"/>
         <vs-button
           @click="checkToSecretKey"
@@ -97,11 +97,18 @@ import {mapActions, mapGetters} from 'vuex'
         })
       },
       async checkToSecretKey(){
-        console.log(this.key);
         this.secretKeySending = true
         try{
           const res = await this.upgradeToAdmin(this.key)
-          console.log(res);
+          if(!res){
+            this.secretKeySending = false
+            this.openNotification({
+              text: 'Try again',
+              title: 'Invalid secret key'
+            })
+            return this.key = ''
+          } 
+          
         }catch(err){
           console.log(err)
         }
@@ -135,8 +142,7 @@ import {mapActions, mapGetters} from 'vuex'
         // Delete prev temp url
         URL.revokeObjectURL(this.tempURL)
         // assuming that this file has any extension
-        const extension = this.selectedFile.name.match(/(?<=\.)\w+$/g)[0].toLowerCase();
-        console.log(extension, "extension");
+        const extension = this.selectedFile.name.match(/(?<=\.)\w+$/g)[0].toLowerCase()
         if(!['jpg', 'jpeg', 'png', 'svg', 'webp'].includes(extension)){
           this.openNotification({
             text: 'The file must be a file of type: jpg | png | svg | webp',
@@ -149,8 +155,6 @@ import {mapActions, mapGetters} from 'vuex'
         // Create temp url
         if(this.selectedFile) this.tempURL = URL.createObjectURL(this.selectedFile)
         else this.tempURL = null
-
-        console.log(this.selectedFile)
       },  
       async editClick(){
         const { displayName, photoURL } = this.getUser

@@ -1,6 +1,8 @@
 .DS_Store
 node_modules
 /dist
+/src/firebase.config.js
+/src/assets/secretKey.js
 
 # local env files
 .env.local

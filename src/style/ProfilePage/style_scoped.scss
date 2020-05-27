@@ -5,6 +5,7 @@
   // position: relative; 
 }
 .profile{
+  @extend %userSelect;
   color: $text-color;
   text-align: center;
   display: flex;
