@@ -1,0 +1,56 @@
+.create-msg{
+  position: relative;
+  box-shadow: 0px 0px 35px -20px rgba($main-color, 0.95);
+  background: $theme-bg;
+  padding: 8px 10px;
+  border-radius: 0px;
+  @extend %flexCentering;
+  justify-content: space-between;
+  @extend %maxWidthCenter;
+  @extend %userSelect;
+  &__btn{
+    margin: 10px auto 0 auto;
+  }
+  &__photo{
+    max-width: 100%;
+    max-height: 350px;
+    display: block;
+    margin: 0 auto;
+    border-radius: 8px;
+  }
+  &__icon{
+    position: relative;    
+    @extend %flexCentering;
+    @include setFontSize(25px);
+    .msg-photo{
+      @extend %absoluteFull;
+      opacity: 0;
+      z-index: 9;
+    }
+  }
+  &__content{
+    width: calc(100% - 70px);
+    -webkit-user-modify: read-write;
+    overflow-wrap: break-word;
+    -webkit-line-break: after-white-space;
+    @include setFontSize(14px);
+    border: none;
+    padding: 8px 10px;
+    border-radius: inherit;
+    max-height: 80px;
+    overflow: hidden;
+    overflow-y: auto;
+    outline: none;
+    word-break: break-word;
+    cursor: text;
+    &:focus {
+      outline: 0;
+    }
+  }
+  .vs-button{
+    margin: 0;
+    &--default:hover{
+      transform: none;
+    }
+  }
+}

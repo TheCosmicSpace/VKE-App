@@ -10,6 +10,8 @@ $text-bg: #202125;
   min-height: inherit;
   display: flex;
   flex-direction: column;
+  max-height: 100vh;
+  overflow: hidden;
 }
 .card{
   padding: 10px 0px;
@@ -20,7 +22,7 @@ $text-bg: #202125;
     content: '';
     position: absolute;
     right: 0px;
-    bottom: 0;
+    bottom: 0px;
     background: transparent;
     width: 0%;
     height: 0%;
@@ -29,7 +31,7 @@ $text-bg: #202125;
   }
   &__frame{
     margin: 0px 5px 0 5px;
-    @include showEl(1.5s, 0s);
+    @include showEl(1s, 0s);
     &::before{
       background: linear-gradient(0deg, rgba(0, 0, 0, 0.3) 5%, rgba(255, 255, 255, 0.05));
     }
@@ -38,12 +40,11 @@ $text-bg: #202125;
     padding: 13px;
     position: relative;
     opacity: 0;
-    @include showEl(1.5s, .3s);
+    @include showEl(1s, .2s);
     margin-top: -30px;
     z-index: 5;
     .vs-avatar img{
-      object-fit: cover;
-      height: 100%;
+      @extend %fullImg;
     }
   }
 }
@@ -54,15 +55,15 @@ $text-bg: #202125;
   color: $text-color;
   background: $text-bg;
   width: 100%;
-  border-radius: 20px 20px 0px 0px;
+  @include setBorderRadius(15px, 15px, 0px ,0px);
   position: relative;
-  overflow: auto; 
-  @include showEl(1.5s, .5s);
+  overflow: auto;
+  @include showEl(1s, .3s);
   &::before{
     content: '';
     position: absolute;
-    width: 50px;
-    height: 4px;
+    width: 55px;
+    height: 3.5px;
     border-radius: 10px;
     background: #D8D9DD; 
     left: 50%;
@@ -72,7 +73,7 @@ $text-bg: #202125;
   }
 }
 .title{
-  font-size: 18px;
+  @include setFontSize(18px);
   font-weight: 600;
   text-align: center;
   background: $title-bg;
@@ -90,7 +91,7 @@ $text-bg: #202125;
   opacity: 0;
   z-index: 99;
   position: absolute;
-  animation: showBtnBack 1.5s forwards 1.5s;
+  animation: showBtnBack 1.2s forwards 1.2s;
 }
 @keyframes showBtnBack {
   0% {opacity: 0;}

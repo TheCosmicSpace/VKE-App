@@ -2,21 +2,20 @@
   &__input {
     position: relative;
     & .vs-input__label{
-      color: #fff;
-      font-size: 18px;
+      color: $text-color;
+      @include setFontSize(18px);
       opacity: 1; 
     } 
     & .vs-input{
       width: 100%;
-      font-size: 16px;
-      // margin-top: 5px;
+      @include setFontSize(16px);
       padding: 7px;
       padding-right: 30px;
     }    
   }
 }
 .input:-internal-autofill-selected{
-  background-color:s transparent !important;
+  background-color: transparent !important;
 }
 
 .addPost-photo{

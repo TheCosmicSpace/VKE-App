@@ -1,6 +1,5 @@
 .vs-avatar-content .vs-avatar img{
-  object-fit: cover;
-  height: 100%;
+  @extend %fullImg;
 }
 .profile{
   &__upgrade{
@@ -23,16 +22,14 @@
   &__edit-username .vs-input-content .vs-input{
     width: 100%;
     text-align: center;
-    color: #fff;
-    font-size: 1em;
-    font-family: Montserrat, Avenir, Helvetica, Arial, sans-serif;
-    padding-top: 0; 
+    color: $text-color;
+    @include setFontSize(1em);
+    padding-top: 0;
+    @extend %fontFamily;
   }
 }
 .key-input{
-  display: flex;
-  align-items: center;
-  justify-content: center; 
+  @extend %flexCentering;
   text-align: center;
   .vs-input-content{
     margin: 0 auto;

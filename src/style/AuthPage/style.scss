@@ -7,22 +7,22 @@
 }
   .auth-wrap{
     height: 100vh;
-    background: #FEFEFE url('../assets/gradient-abstract-background.jpg') no-repeat center center;
-    background-size: cover; 
-    background-attachment: fixed;
-    display: flex;
+    background-image: url('../assets/gradient-abstract-background.jpg');
+    @extend %bgStandard;
+    @extend %flexCentering;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
 
   }
   .auth-form{
+    @extend %userSelect;
     width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
   }
   .auth-form-title{
     text-align: center;
-    color: #20202b;
-    font-size: 40px;
+    color: $theme-bg;
+    @include setFontSize(40px);
     margin-bottom: 50px;
   }      
   .form{  
@@ -35,8 +35,7 @@
   }
   .input-group{
     background: #fff;
-    border-top-right-radius: 100px;
-    border-bottom-right-radius: 100px; 
+    @include setBorderRadius(0, 100px, 100px, 0);
     box-shadow: 5px 0px 28px -10px rgba(30, 30, 46, 0.25);
     overflow-x: hidden;
   }
@@ -55,8 +54,7 @@
   }
   .form-input .vs-input__icon{
     margin-left: 10px;
-    user-select: none;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    @extend %userSelect;
   }
   .form-btn{
     width: 50px;
@@ -66,27 +64,25 @@
     right: -25px;
     transform: translateY(-55%);
     border-radius: 50%; 
-    color:#fff; 
-    font-size: 25px;
+    color: $text-color;
+    @include setFontSize(25px);
     background: linear-gradient(90deg, #15C5CF, #30E3A4);
   }
   .forgot{
     padding: 20px 20px 0 0;
     text-align: right;
     font-weight: 600;
-    color: #CCCED0;  
-    font-size: 14px;
+    color: #CCCED0;
+    @include setFontSize(14px);
   }
   .toggleForm{
     color: #EF9C8D;
-    font-size: 15px;
+    @include setFontSize(15px);
     font-weight: 600;
     margin: 25px 0;
     padding: 0px 15px;
     background: none;
-    border-radius: 0;
-    border-top-right-radius: 25px;
-    border-bottom-right-radius: 25px;
+    @include setBorderRadius(0, 25px, 25px, 0);
     box-shadow: 2px 5px 15px -8px rgba(30, 30, 46, 0.25);
   }
   .toggleForm:hover::before{

@@ -1,10 +1,9 @@
 .chats{
+  @extend %maxWidthCenter;
   // padding: 0 10px;
   &-title{
     position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @extend %flexCentering;
   }
   &-rooms{
     margin: 20px 0;

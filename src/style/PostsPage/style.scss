@@ -9,23 +9,21 @@
   background: $theme-bg;
 }
 .home{
-  color: #fff;
+  color: $text-color;
   padding-bottom: 100px;
+  @extend %userSelect;
+  @extend %maxWidthCenter;
 }
 .home-title{
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @extend %flexCentering;
 }
 .vs-button.add-btn{
   position: absolute;
-  top: 50%;
   right: 0;
-  transform: translateY(-55%);
 }
-.vs-button.add-btn:focus{
-  transform: translateY(-55%);
+.vs-button--floating.add-btn:hover{
+  transform: none;
 }
 .posts{
   display: flex;

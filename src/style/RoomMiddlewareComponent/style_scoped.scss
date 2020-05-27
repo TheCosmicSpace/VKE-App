@@ -1,10 +1,8 @@
 .key-input{
-  display: flex;
-  align-items: center;
-  justify-content: center; 
+  @extend %flexCentering;
   text-align: center;
   .vs-button--default{
-    background: #28293D;
+    background: $sub-bg;
   }
   .vs-input-content{
     margin: 0 auto;

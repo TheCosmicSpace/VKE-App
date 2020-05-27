@@ -6,11 +6,9 @@
     margin: 0 auto;
     border-radius: 20px;
     position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @extend %flexCentering;
     flex-direction: column;
     text-align: center;
-    font-size: .6rem;
+    @include setFontSize(.6rem);
   }
 } 

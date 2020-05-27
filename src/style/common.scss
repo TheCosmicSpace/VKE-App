@@ -1,4 +1,60 @@
 $theme-bg: #12121C;
 $text-color: #FBFBFC;
-$main-color: #d5397b;
+$sub-bg: #28293D;
+$sub-color: #1F1F2E;
+// $main-color: #d5397b; 
+$main-color: #E57373;
+$postCard-bg: #1F2229;
 $BottomNavigation-color: rgb(15, 15, 19);
+// 
+@mixin setFontSize($fs){
+  font-size: $fs;
+}
+@mixin setBorderRadius($lt, $rt, $rb, $lb) {
+  border-radius: $lt $rt $rb $lb;
+}
+// 
+%fontFamily{
+  font-family: Montserrat, Avenir, Helvetica, Arial, sans-serif;
+}
+%text-overflow{
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+%flexCentering{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+%absoluteFull{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+%bgStandard{
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+%fullImg{
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+%userSelect{
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+%maxWidthCenter{
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto; 
+}
+
+body{
+  @extend %fontFamily;
+  background-color: $theme-bg;
+}

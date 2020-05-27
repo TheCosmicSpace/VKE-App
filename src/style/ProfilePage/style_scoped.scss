@@ -5,7 +5,7 @@
   // position: relative; 
 }
 .profile{
-  color: #fff;
+  color: $text-color;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -24,38 +24,26 @@
     padding-top: 20px;
     width: 70%;
     margin: 0 auto;
-    font-size: 24px;    
+    @include setFontSize(24px);
   }
   &__username{
-    font-size: 1em;
+    @include setFontSize(1em);
     padding-bottom: 7px;
   }
   &__btn-group{
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @extend %flexCentering;
     margin-top: auto;
     padding-bottom: 80px;
   }
   &__btn{
-    font-size: 14px;
+    @include setFontSize(14px);
   }
   &__edit-photo{
-    width: 100%;
-    height: 100%;
-    position: absolute; 
-    left: 0;
-    top: 0;
     border-radius: inherit;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
+    @extend %absoluteFull;
+    @extend %bgStandard;
     input{
-      position: absolute;
-      width: 100%;   
-      height: 100%;
-      left: 0;
-      top: 0;
+      @extend %absoluteFull;
       z-index: 3;
       opacity: 0;
     }
@@ -63,19 +51,14 @@
       // content: 'Choose a file';
       content: 'Upload a file';
       color: #fff;
-      font-weight: 600;
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      padding-bottom: 20px;
-      font-size: 16px;
       opacity: 1;
-      position: absolute;
-      left: 0;
-      top: 0;    
-      width: 100%;   
-      height: 100%;
+      font-weight: 600;
+      padding-bottom: 20px;
       border-radius: inherit;
+      @extend %flexCentering;
+      align-items: flex-end;
+      @extend %absoluteFull;
+      @include setFontSize(16px);
       background: rgba($color: #000000, $alpha: 0.7);
     } 
   }

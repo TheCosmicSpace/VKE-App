@@ -2,11 +2,11 @@
   .vs-input{
     // width: 250px;
     border-radius: 8px;
-    color: #1F1F2E;
+    color: $sub-color;
     padding: 10px;
     padding-right: 40px;
     &__label{
-      color: #1F1F2E;
+      color: $sub-color;
       opacity: 1;
     }
   }
@@ -16,7 +16,7 @@
       @include setFontSize(15px);
     }
     &__loading{
-      background: fade-out(#1F1F2E, .4);
+      background: fade-out($sub-color, .4);
     }
   }
 }

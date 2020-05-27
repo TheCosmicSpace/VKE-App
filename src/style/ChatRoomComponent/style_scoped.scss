@@ -26,18 +26,14 @@ $duration: 1.6s;
 }
 @mixin loadingBefore {
   content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
+  @extend %absoluteFull;
   @include animation-gradient;
   background-color: $theme-bg;
   animation: animate-line $duration infinite linear;
 }
 
 .chat-room{
-  user-select: none;
+  @extend %userSelect;
   position: relative;
   margin: 15px 0;
   background: #28293d;
@@ -68,18 +64,13 @@ $duration: 1.6s;
     margin-right: 10px;
     margin-left: 5px;
     img {
-      height: 100%;
-      object-fit: cover;
+      @extend %fullImg;
     }
     &.loading{
       position: relative;
       ::before{
         content: '';
-        position: absolute;
-        left: 0;
-        top: 0;  
-        width: 100%;
-        height: 100%;
+        @extend %absoluteFull;
         z-index: 9;
         background: $theme-bg;
         border-radius: 50%;
@@ -95,9 +86,8 @@ $duration: 1.6s;
   @include setFontSize(10px);
   &__top,
   &__footer{
-    display: flex;
+    @extend %flexCentering;
     justify-content: space-between;
-    align-items: center;
     padding: 5px 0;   
   }
   &__footer{
@@ -148,9 +138,7 @@ $duration: 1.6s;
 }
 
 .showSecret{
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @extend %flexCentering;
   animation: showSecret .6s forwards;
 }
 .showSecret ~ div{

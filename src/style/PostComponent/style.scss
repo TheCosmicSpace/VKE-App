@@ -19,6 +19,7 @@
 }
 // ========================
 .card{
+  @extend %userSelect;
   color: $text-color;
   position: relative;
   min-width: 320px;
@@ -84,8 +85,7 @@
     margin-right: 8px;
     object-fit: cover;
     .vs-avatar img{
-      height: 100%;
-      object-fit: cover;
+      @extend %fullImg;
     }
   }
   &__author-name{
@@ -93,9 +93,7 @@
     font-style: italic;
     font-weight: 600;
     max-width: 150px;
-    white-space: nowrap;
-    overflow-x: hidden; 
-    text-overflow: ellipsis; 
+    @extend %text-overflow;
   }
   &__date{
     @include setFontSize(12px);

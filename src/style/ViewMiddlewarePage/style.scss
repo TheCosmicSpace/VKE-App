@@ -1,10 +1,8 @@
 .view-middleware{
-  user-select: none;
+  @extend %userSelect;
   margin: 0 auto;
   min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @extend %flexCentering;
   text-align: center;
   flex-direction: column;
   background: #7DCDC1;
@@ -16,9 +14,9 @@
     }
   }
   &__title{
-    font-size: 25px;
+    @include setFontSize(25px);
     font-weight: bold;
-    color: #fff;
+    color: $text-color;
     padding: 0 5px;
   }
 }

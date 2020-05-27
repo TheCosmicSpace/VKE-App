@@ -1,0 +1,37 @@
+.photo-preview{
+  .vs-dialog{
+    background: $postCard-bg;
+    color: $text-color; 
+    &__content{
+      max-height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    &__close{
+      .vs-icon-close{
+        opacity: 1;
+        &::before,
+        &::after{
+          background: $main-color;
+        }
+      }
+    }
+  }
+  .create-msg{
+    &__title{
+      // #E57373
+      margin: 30px auto 0 auto;
+      .vs-input-parent--border .vs-input-content .vs-input{
+        width: 100%;
+        color: $text-color; 
+      }
+      width: 80%;
+    }
+  }
+}
+.chat-header{
+  .vs-avatar img{
+      @extend %fullImg;
+    }
+}

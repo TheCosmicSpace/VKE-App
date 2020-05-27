@@ -1,5 +1,5 @@
 .like-count{
-  font-size: 10px;
+  @include setFontSize(10px);
   transform: translateX(-5px);
   color: $text-color;
   transition: .5s;

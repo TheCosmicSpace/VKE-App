@@ -1,15 +1,14 @@
 .create-chat{
   width: 100%;
-  display: flex;
-  align-items: center;
+  @extend %userSelect;
+  @extend %flexCentering;
   justify-content: space-around;
   &__settings{
     display: flex;
     flex-direction: column;
   }
   &__group{
-    display: flex;
-    align-items: center; 
+    @extend %flexCentering;
     justify-content: space-between;
   }
   &__title,
@@ -19,8 +18,7 @@
   &__photo{
     position: relative;
     .vs-avatar img{
-      height: 100%;
-      object-fit: cover;
+      @extend %fullImg;
     }
   }
   &__fileselect{
