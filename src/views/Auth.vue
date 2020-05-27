@@ -144,12 +144,21 @@ import { mapGetters, mapActions } from 'vuex'
       },
       // Registration logic
       async register() {
-        const { password, confirmPassword } = this.user 
+        const { password, confirmPassword, username } = this.user 
         if(password !== confirmPassword) {
           this.toggleProcessing(false)
           // Notification on Error
           this.openNotification({
-            title: "Invalid Password"
+            title: 'Invalid Password',
+            text: 'Password and confirmation do not match'
+          })
+          return
+        }
+        if(username.length > 30 || username.length < 3){
+          this.toggleProcessing(false)
+          this.openNotification({
+            title: 'Invalid User Name',
+            text: 'Username must contain 3-30 characters'
           })
           return
         }

@@ -159,10 +159,11 @@ import {mapActions, mapGetters} from 'vuex'
           // No Changes
           if(!this.selectedFile && this.editDisplayName === displayName) return (this.toggleProcessing(false), this.edit = false)
           // Too Large
-          if(this.editDisplayName.length > 30){
+          if(this.editDisplayName.length > 30 || this.editDisplayName.length < 3){
             //Error
             this.openNotification({
-              title: "Invalid User Name"
+              title: 'Invalid User Name',
+              text: 'Username must contain 3-30 characters'
             })
             return (this.toggleProcessing(false), this.edit = false)
           }
@@ -177,7 +178,7 @@ import {mapActions, mapGetters} from 'vuex'
             // Save Changes To Collection
             await this.saveChangesToCollection(editData)
             // Show Notification
-            this.openNotification({title: "Success"}, "success")
+            this.openNotification({title: "Changes saved"}, "success")
             this.selectedFile = null
             this.tempURL = null
           }
