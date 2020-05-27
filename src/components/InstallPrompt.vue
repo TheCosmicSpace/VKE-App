@@ -1,7 +1,7 @@
 <template>
   <div class="install-prompt">
     <div class="center">
-      <vs-dialog prevent-close v-model="active">
+      <vs-dialog blur prevent-close v-model="active">
         <template #header>
           <h4 class="not-margin">
             Welcome to <b>VKE App</b>
