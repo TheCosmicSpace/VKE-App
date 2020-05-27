@@ -1,5 +1,5 @@
 <template>
-<footer class="bottom-nav">
+<footer v-if="!isHidden" class="bottom-nav">
   <nav class="nav nav--icons">
     <ul>
       <li>
@@ -14,7 +14,7 @@
         </router-link>
       </li>
       <li>
-        <router-link :to="{name: 'Posts'}" active-class="is-active" exact>
+        <router-link :to="{name: 'Chats'}" active-class="is-active" exact>
         <svg class="icon icon-news" viewBox="0 0 24 24" width="20" height="20">
           <g fill="currentColor"> 
             <path d="M5,18v3.766l1.515-0.909l0,0L11.277,18H16c1.103,0,2-0.897,2-2V8c0-1.103-0.897-2-2-2H4C2.897,6,2,6.897,2,8v8 c0,1.103,0.897,2,2,2H5z M4,8h12v8h-5.277L7,18.234V16H4V8z"/>
@@ -50,6 +50,20 @@
 
 <script>
   export default {
+    name: 'BottomNavigation',
+    computed: {
+      isHidden(){
+        return this.hidden
+      }
+    },
+    methods: {
+      toggleHidden(state){
+        this.hidden = state
+      }
+    },
+    data:()=>({
+      hidden: false
+    })
   }
 </script>
 
