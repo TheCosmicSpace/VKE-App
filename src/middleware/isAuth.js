@@ -3,7 +3,14 @@ import 'firebase/auth'
 
 export default function({next}){
   firebase.auth().onAuthStateChanged(user => {
-    if(user) next();
-    else next({ name: 'Auth' })
+    if(user) {
+      next();
+      return true
+    }
+    else{
+      next({ name: 'Auth' })
+      return false
+    }
   })
 }
+
