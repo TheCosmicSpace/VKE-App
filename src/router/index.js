@@ -8,11 +8,16 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path: '/view-middleware',
+    name: 'ViewMiddleware',
+    component: () => import('../views/ViewMiddleware.vue'),
+  },
+  {
     path: '/',
     name: 'Posts',
     component: Posts,
     meta: {
-      middleware: ['checkMobileDevice']
+      middleware: ['checkMobileDevice', 'checkBrowser']
     },
   },
   {
@@ -27,15 +32,31 @@ const routes = [
     component: () => import('../views/AddPost.vue')
   },
   {
+    path: '/chats',
+    name: 'Chats',
+    component: () => import('../views/Chats.vue'),
+    meta: {
+      middleware: ['checkMobileDevice', 'checkBrowser', 'isAuth']
+    },
+  },
+  {
+    path: '/chats/:chatId',
+    name: 'ChatItem',
+    component: () => import('../views/ChatItem.vue')
+  },
+  {
     path: '/auth',
     name: 'Auth',
-    component: () => import('../views/Auth.vue')
+    component: () => import('../views/Auth.vue'),
+    meta: {
+      middleware: ['checkMobileDevice', 'checkBrowser']
+    }
   },
   {
     path: '/profile',
     name: 'Profile',
     meta: {
-      middleware: ['isAuth']
+      middleware: ['checkMobileDevice', 'checkBrowser', 'isAuth']
     },
     component: () => import('../views/Profile.vue')
   }
