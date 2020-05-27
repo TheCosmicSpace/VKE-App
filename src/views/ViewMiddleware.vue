@@ -33,7 +33,9 @@ export default {
     }
   },
   created(){
-    if(!this.$route.params.typeMiddleware) this.$router.replace({name: 'Posts'})
+    if(!this.$route.params.typeMiddleware)
+      this.$router.go(-2)
+      // this.$router.push({name: 'Posts'})
   }
 }
 </script>
