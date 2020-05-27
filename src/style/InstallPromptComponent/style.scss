@@ -1,0 +1,18 @@
+.install-prompt{
+  @extend %userSelect;
+  .vs-dialog{
+    &-content{
+      background: rgba($theme-bg, .85);
+    }
+    &__close{
+      display: none;
+    }
+    &__footer{
+      width: 150px;
+      margin: 0 auto;
+    }
+  }
+  .con-form-text{
+    text-align: center;
+  }
+}
