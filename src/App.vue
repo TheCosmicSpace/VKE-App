@@ -1,32 +1,78 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+  <div ref="app" id="app">
+    <InstallPrompt v-if="canInstallPrompt && notMiddleware"/>
+    <transition name="modal" mode="out-in">
+      <router-view/>
+    </transition>
+    <BottomNavigation ref="BottomNavigation"/>
   </div>
 </template>
 
-<style>
+<script>
+import {mapGetters, mapMutations} from 'vuex'
+import BottomNavigation from '@/components/BottomNavigation.vue' 
+import InstallPrompt from '@/components/InstallPrompt.vue'
+  export default {
+    components:{
+      BottomNavigation,
+      InstallPrompt
+    },
+    computed: {
+      ...mapGetters([
+        'canInstallPrompt'
+      ]),
+      notMiddleware(){
+        return this.$router.currentRoute.name !== 'ViewMiddleware'
+      }
+    },
+    methods: {
+      callEvent(state){
+        this.elBottomNav.dispatchEvent(
+          new CustomEvent('hideBottomNavigation', {
+            detail: {state}
+          }))
+      }
+    },
+    data:()=>({
+      elBottomNav: null
+    }),
+    mounted(){
+      const { name } = this.$router.currentRoute
+      console.log(name);
+      this.elBottomNav = this.$refs.BottomNavigation.$el
+      this.elBottomNav.addEventListener('hideBottomNavigation', (e) => {
+        this.$refs.BottomNavigation.toggleHidden(e.detail.state)
+      })
+      // it's not cool
+      window.HideBottomNav = this.callEvent
+    }
+  }
+</script>
+
+<style lang="scss">
+// Imports
+@import "./style/title";
+*,*::after,*::before{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  font-family: Montserrat, Avenir, Helvetica, Arial, sans-serif;
+  background: $theme-bg;
+  min-height: 100vh;
 }
-
-#nav {
-  padding: 30px;
+ul, li{
+  list-style: none;
 }
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+a{
+  color: inherit;
+  text-decoration: none;
 }
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+.d-flex{
+  display: flex;
+}
+.container{
+  padding: 0 10px;
 }
 </style>
