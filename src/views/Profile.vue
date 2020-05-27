@@ -12,7 +12,7 @@
       <i v-else class='bx bx-user'></i>
       <!-- Edit Avatar -->
       <div v-if="edit" :style="{backgroundImage: getTempURL}" class="profile__edit-photo">
-        <input type="file" @change="onFileSelected" accept="image/*" class="profile__edit-photo"/>
+        <input type="file" @change="onFileSelected" accept="image/*" tabindex="-1" class="profile__edit-photo"/>
       </div>
     </vs-avatar>
 
@@ -122,8 +122,30 @@ import {mapActions, mapGetters} from 'vuex'
       // File Selected 
       onFileSelected(e){
         this.selectedFile = e.target.files[0]
+        // Check size
+        const size = (this.selectedFile.size / (1024**2)).toFixed(1);
+        if(size > 3){
+          this.openNotification({
+            text: 'Maximum size: 3 MB',
+            title: 'File is too large'
+          })
+          this.selectedFile = null
+          return e.target.value= ''
+        }
         // Delete prev temp url
         URL.revokeObjectURL(this.tempURL)
+        // assuming that this file has any extension
+        const extension = this.selectedFile.name.match(/(?<=\.)\w+$/g)[0].toLowerCase();
+        console.log(extension, "extension");
+        if(!['jpg', 'jpeg', 'png', 'svg', 'webp'].includes(extension)){
+          this.openNotification({
+            text: 'The file must be a file of type: jpg | png | svg | webp',
+            title: 'Invalid file type'
+          })
+          this.tempURL = null
+          this.selectedFile = null
+          return e.target.value= ''
+        }
         // Create temp url
         if(this.selectedFile) this.tempURL = URL.createObjectURL(this.selectedFile)
         else this.tempURL = null
@@ -164,17 +186,7 @@ import {mapActions, mapGetters} from 'vuex'
             this.openNotification({title: "Error", text: err}, "danger")
           }
           this.toggleProcessing(false)
-          this.edit = false            
-          // Promises style
-          // Call action Update Profile then call Save Changes To Collection
-            // this.updateProfile(this.editData)
-            // .then(() => this.saveChangesToCollection(this.editData))
-            // .then(() => {
-            //   this.openNotification({title: "Success"}, "success")
-            //   this.edit = false
-            // })
-            // .catch(err => console.log(err))
-          // Send to update profile
+          this.edit = false
         }
         else{
           this.edit = true;
@@ -208,7 +220,7 @@ import {mapActions, mapGetters} from 'vuex'
       }
     },
   }
-  const colorsMap = ["#ffb4a2", "#4ecdc4", "#ff6b6b", "#8e9aaf", "#49dcb1"]
+  const colorsMap = ["#ffb4a2", "#4ecdc4","#7bf1a8",  "#e2afff", "#ff6b6b", "#73b1d8", "#49dcb1"]
 </script>
 
 

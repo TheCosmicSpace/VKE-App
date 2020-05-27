@@ -1,6 +1,5 @@
 <template>
-  <div class="cr">
-    <div class="container">
+  <div>
     <!-- Preview Photo Dialog -->
     <template>
       <vs-dialog class="photo-preview" overflow-hidden v-model="openPreloadPhoto">
@@ -32,11 +31,11 @@
           :disabled="isDisabled"
           circle
           icon
-          @click="sendMsg">
+          @click="sendMsg"
+          class="create-msg__send">
           <i class="bx bxs-paper-plane"></i>
         </vs-button>
       </div>
-    </div>
   </div>
 </template>
 
@@ -57,6 +56,15 @@ import { mapActions } from 'vuex'
         'uploadRoomPhoto',
         'tempMessage',
       ]),
+      // Notification
+      openNotification({title, text}, color = 'danger', position = 'top-center') {
+        const noti = this.$vs.notification({
+          color,
+          position,
+          title: title,
+          text: text
+        })
+      },
       enterMessage(){
         this.msgContent = this.$refs.msgValue.textContent
       },
@@ -67,7 +75,7 @@ import { mapActions } from 'vuex'
             content: this.msgContent,
             photo: this.selectedFile
           }
-          this.msgContent = this.$refs.msgValue.textContent = ''
+          this.msgContent = this.selectedFile = this.$refs.msgValue.textContent = ''
           this.openPreloadPhoto = false
           const messageId = await this.tempMessage(messageData)
         }
@@ -78,14 +86,29 @@ import { mapActions } from 'vuex'
       // Select photo message
       onFileSelected(e){
         this.selectedFile = e.target.files[0]
+        // Check size
+        const size = (this.selectedFile.size / (1024**2)).toFixed(1);
+        if(size > 5){
+          this.openNotification({
+            text: 'Maximum size: 5 MB',
+            title: 'File is too large'
+          })
+          this.selectedFile = null
+          return e.target.value= ''
+        }
         // Delete prev temp url
         URL.revokeObjectURL(this.tempURL)
         // assuming that this file has any extension
         const extension = this.selectedFile.name.match(/(?<=\.)\w+$/g)[0].toLowerCase();
         console.log(extension, "extension");
-        
+
         if(!['jpg', 'jpeg', 'png', 'svg', 'webp'].includes(extension)){
+          this.openNotification({
+            text: 'The file must be a file of type: jpg | png | svg | webp',
+            title: 'Invalid file type'
+          })
           this.tempURL = null
+          this.selectedFile = null
           this.openPreloadPhoto = false
         }
         else{
@@ -100,7 +123,10 @@ import { mapActions } from 'vuex'
     },
     watch: {
       openPreloadPhoto(value){
-        if(!value) this.msgContent = ''
+        if(!value) {
+          this.msgContent = ''
+          this.selectedFile = null
+        }
       }
     },
     props: ['chatId'],
@@ -116,105 +142,9 @@ import { mapActions } from 'vuex'
 </script>
 
 <style lang="scss">
-.photo-preview{
-  .vs-dialog{
-    background: $postCard-bg;
-    color: $text-color; 
-    &__content{
-      max-height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    &__close{
-      .vs-icon-close{
-        opacity: 1;
-        &::before,
-        &::after{
-          background: $main-color;
-        }
-      }
-    }
-  }
-  .create-msg{
-    &__title{
-      margin: 30px auto 0 auto;
-      .vs-input-parent--border .vs-input-content .vs-input{
-        width: 100%;
-        color: $text-color;
-      }
-      width: 80%;
-    }
-  }
-}
-.chat-header{
-  .vs-avatar img{
-      height: 100%;
-      object-fit: cover;
-    }
-}
+  @import '@/style/CreateMessageComponent/style.scss';
 </style>
 
 <style lang="scss" scoped>
-.create-msg{
-  position: relative;
-  box-shadow: 0px 0px 35px -20px rgba($main-color, 0.95);
-  display: flex;
-  align-items: center;
-  background: #28293D;
-  padding: 5px 10px;
-  border-radius: 10px;
-  justify-content: space-between;
-  &__btn{
-    margin: 10px auto 0 auto;
-  }
-  &__photo{
-    max-width: 100%;
-    max-height: 350px;
-    display: block;
-    margin: 0 auto;
-    border-radius: 8px;
-  }
-  &__icon{
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    @include setFontSize(25px);
-    .msg-photo{
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      left: 0;
-      top: 0;
-      opacity: 0;
-      z-index: 9;
-    }
-  }
-  &__content{
-    width: calc(100% - 70px);
-    -webkit-user-modify: read-write;
-    overflow-wrap: break-word;
-    -webkit-line-break: after-white-space;
-    @include setFontSize(14px);
-    border: none;
-    padding: 8px 10px;
-    border-radius: inherit;
-    max-height: 80px;
-    overflow: hidden;
-    overflow-y: auto;
-    outline: none;
-    word-break: break-word;
-    cursor: text;
-    &:focus {
-      outline: 0;
-    }
-  }
-  .vs-button{
-    margin: 0;
-    &--default:hover{
-      transform: none;
-    }
-  }
-}
+  @import '@/style/CreateMessageComponent/style_scoped.scss';
 </style>
