@@ -6,8 +6,10 @@ async function callMiddleware(routeData){
     const { meta } = routeData;
     for(let middleware of meta){
         let result = await importMiddleware(middleware, routeData);
-        if(!result) break;
+        console.log(middleware, result);
+        if(!result) return;
     }
+    routeData.next()
 }
 
 /**
@@ -17,8 +19,11 @@ async function callMiddleware(routeData){
  */
 async function importMiddleware(fileName, routeData){
     const module = await import(`/${fileName}`);
-    const result = module.default(routeData);
-    return (typeof result === undefined || result);
+    const moduleResult = await module.default(routeData);
+    console.log(moduleResult);
+    return moduleResult
+    // return result
+    // return (typeof result === undefined || result);
 }
 
 
