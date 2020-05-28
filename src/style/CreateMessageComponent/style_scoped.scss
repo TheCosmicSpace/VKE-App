@@ -28,14 +28,20 @@
       z-index: 9;
     }
   }
+  &__emoji{
+    position: relative;    
+    @extend %flexCentering;
+    @include setFontSize(25px);
+    margin-right: 6px;
+  }
   &__content{
-    width: calc(100% - 70px);
+    width: calc(100% - 85px);
     -webkit-user-modify: read-write;
     overflow-wrap: break-word;
     -webkit-line-break: after-white-space;
     @include setFontSize(14px);
     border: none;
-    padding: 8px 10px;
+    padding: 8px 5px 8px 5px;
     border-radius: inherit;
     max-height: 80px;
     overflow: hidden;
@@ -52,5 +58,11 @@
     &--default:hover{
       transform: none;
     }
+    &__content{
+      padding: 5px;
+    }
+  }
+  .emoji{
+    width: 100%;
   }
 }

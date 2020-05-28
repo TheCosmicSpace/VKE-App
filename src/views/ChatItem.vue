@@ -79,8 +79,8 @@
         return this.getChatData.title
       },
       chatUserLen(){
-        if (!this.getChatData.users) return 
-        this.getChatData.users.length
+        if (!this.getChatData.users) return
+        return this.getChatData.users.length
       },
       isReadOnly(){
         return this.getChatData.readOnly &&

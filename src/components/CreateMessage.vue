@@ -27,6 +27,10 @@
         <i class='bx bx-image-add'></i>
       </div>
       <div ref="msgValue" class="create-msg__content" @input="enterMessage" contenteditable="true" spellcheck="false"></div>
+      <div class="create-msg__emoji"
+        @click="openEmoji = !openEmoji">
+        <i class='bx bx-happy-beaming' ></i>
+      </div>
       <vs-button
           :disabled="isDisabled"
           circle
@@ -34,15 +38,22 @@
           @click="sendMsg"
           class="create-msg__send">
           <i class="bx bxs-paper-plane"></i>
-        </vs-button>
-      </div>
+      </vs-button>
+    </div>
+    <transition name="emoji-view" mode="out-in">
+      <VEmojiPicker v-if="openEmoji" class="emoji" @select="selectEmoji" />
+    </transition>
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
+import VEmojiPicker from 'v-emoji-picker'
   export default {
     name: 'CreateMessage',
+    components: {
+      VEmojiPicker
+    },
     computed: {
      getTempURL(){
         return this.tempURL
@@ -64,6 +75,11 @@ import { mapActions } from 'vuex'
           title: title,
           text: text
         })
+      },
+      selectEmoji(emoji) {
+        this.$refs.msgValue.textContent += emoji.data
+        this.msgContent += emoji.data
+        console.log(emoji)
       },
       enterMessage(){
         this.msgContent = this.$refs.msgValue.textContent
@@ -131,6 +147,7 @@ import { mapActions } from 'vuex'
     data:()=>({
       msgContent: '',
       openPreloadPhoto: false,
+      openEmoji: false,
       tempURL: null,
       selectedFile: null,
     }),

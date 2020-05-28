@@ -35,3 +35,32 @@
       @extend %fullImg;
     }
 }
+.create-msg{
+  .vs-button--icon .vs-button__content{
+    padding: 8px;
+  }
+  .vs-button--icon i{
+    @include setFontSize(15px);
+  }
+}
+#EmojiPicker{
+  #InputSearch{
+    display: none;
+  }
+  width: 100% !important;
+  .grid-emojis{
+    grid-template-columns: repeat(8, 12.5%) !important;
+  }
+  .container-emoji{
+    height: 155px;
+  }
+}
+.emoji-view-enter-active, .emoji-view-leave-active {
+  transition: opacity .15s ease-in-out, transform .15s ease-in-out;
+}
+.emoji-view-enter, .emoji-view-leave-to {
+  transform: translateY(100%);
+}
+.emoji-view-enter-to, .emoji-view-leave {
+  transform: translateY(0);
+}

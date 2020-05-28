@@ -45,12 +45,14 @@
   }
 }
 .create{
-  position: fixed;
-  width: 100%;
-  bottom: 0px;
+  position: relative;
   z-index: 9;
-  background: $theme-bg; 
-  left: 0;
+  background: $theme-bg;
+  // position: fixed;
+  // width: 100%;
+  // bottom: 0px;
+  // z-index: 9; 
+  // left: 0;
 }
 .messages-area-wrap{
   position: relative;
@@ -68,6 +70,6 @@
   }
 }
 .messages-area{
-  padding: 0 10px 50px 10px;
+  padding: 0 10px 40px 10px;
   @extend %maxWidthCenter;
 }

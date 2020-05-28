@@ -9,13 +9,19 @@
       </p>
     </div>
     <div v-if="browser" class="browser">
-      <div class="view-middleware__img">
+      <div class="view-middleware__img chrome-img">
         <img src="../assets/ChromiumIcon.png" alt="ChromiumIcon">
       </div>
       <p class="view-middleware__title">
         Sorry, you need to install Google Chrome in order to use this application.
       </p>
     </div>
+    <vs-button
+      @click="tryAgaing"
+      icon
+      color="twitter">
+        Try Again <i class='bx bx-rotate-left' style='color:#fff'></i>
+      </vs-button>
   </div>
 </template>
 
@@ -32,9 +38,15 @@ export default {
       return this.$route.params.typeMiddleware
     }
   },
+  methods: {
+    tryAgaing(){
+      location.replace('/')
+      // this.$router.push({name: 'Posts'})
+    }
+  },
   created(){
     if(!this.$route.params.typeMiddleware)
-      this.$router.go(-2)
+      this.$router.go(-1)
       // this.$router.push({name: 'Posts'})
   }
 }

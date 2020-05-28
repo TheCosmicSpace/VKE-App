@@ -7,16 +7,19 @@
   flex-direction: column;
   background: #7DCDC1;
   &__img{
-    max-width: 200px;
+    max-width: 270px;
     margin: 0 auto;
     img{
       max-width: 100%;
     }
   }
+  .chrome-img{
+    max-width: 150px;
+  }
   &__title{
-    @include setFontSize(25px);
+    @include setFontSize(20px);
     font-weight: bold;
     color: $text-color;
-    padding: 0 5px;
+    padding: 0 15px;
   }
 }
