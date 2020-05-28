@@ -59,6 +59,10 @@ const routes = [
       middleware: ['checkMobileDevice', 'checkBrowser', 'isAuth']
     },
     component: () => import('../views/Profile.vue')
+  },
+  {
+    path: '/*',
+    redirect: {name: 'Posts'}
   }
 ]
 
