@@ -1,5 +1,6 @@
 # vke-news
 
+Demo: https://vke-app.netlify.app
 ## Project setup
 ```
 npm install
